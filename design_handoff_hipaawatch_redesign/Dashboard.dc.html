@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; }
+    *, *::before, *::after { box-sizing: border-box; }
+    ::selection { background: #0E8A6E; color: #F4F1E8; }
+    .ld-scroll::-webkit-scrollbar { width: 0; height: 0; }
+  </style>
+</helmet>
+
+<div style="min-height:100vh; position:relative; background:#F4F1E8; color:#14130F; font-family:'Archivo','Helvetica Neue',Arial,sans-serif; -webkit-font-smoothing:antialiased; --accent:{{accent}}; --signal:{{signal}}; --pad:{{padY}};">
+
+  <sc-if value="{{ showTexture }}" hint-placeholder-val="{{ true }}">
+    <div style="position:fixed; inset:0; pointer-events:none; z-index:0; background-image:linear-gradient(rgba(20,19,15,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(20,19,15,0.04) 1px,transparent 1px); background-size:34px 34px; -webkit-mask-image:radial-gradient(120% 100% at 50% 0%,#000 55%,transparent 100%); mask-image:radial-gradient(120% 100% at 50% 0%,#000 55%,transparent 100%);"></div>
+  </sc-if>
+
+  <div style="position:relative; z-index:1;">
+
+    <!-- ── Nav ─────────────────────────────────────────── -->
+    <header style="position:sticky; top:0; z-index:20; backdrop-filter:saturate(140%) blur(8px); -webkit-backdrop-filter:saturate(140%) blur(8px); background:rgba(244,241,232,0.82); border-bottom:1px solid rgba(20,19,15,0.07);">
+      <div style="max-width:1180px; margin:0 auto; padding:15px 32px; display:flex; align-items:center; justify-content:space-between; gap:24px;">
+        <div style="display:flex; align-items:baseline; gap:12px;">
+          <span style="font-weight:800; font-size:15px; letter-spacing:0.06em;">HIPAA<span style="color:var(--accent,#0E8A6E);">·</span>WATCH</span>
+          <span style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#8C887C; letter-spacing:0.04em;">Compliance &amp; Technology</span>
+        </div>
+        <nav style="display:flex; align-items:center; gap:26px;">
+          <a href="Dashboard.dc.html" style="font-size:14px; font-weight:600; color:#14130F; padding-bottom:2px; border-bottom:2px solid var(--accent,#0E8A6E); text-decoration:none;">Overview</a>
+          <a href="Timeline.dc.html" style="font-size:14px; font-weight:500; color:#57544B; text-decoration:none;">Timeline</a>
+          <a href="Latest Intelligence.dc.html" style="font-size:14px; font-weight:500; color:#57544B; text-decoration:none;">Intelligence</a>
+          <a href="Breaches.dc.html" style="font-size:14px; font-weight:500; color:#57544B; text-decoration:none;">Breaches</a>
+          <a href="AI Advisor.dc.html" style="font-size:14px; font-weight:600; color:#0A5C49; text-decoration:none;">Advisor →</a>
+        </nav>
+      </div>
+    </header>
+
+    <main style="max-width:1180px; margin:0 auto; padding:var(--pad,64px) 32px 96px;">
+
+      <!-- ── Masthead / issue intro ──────────────────────── -->
+      <section style="max-width:780px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; color:#0A5C49; display:flex; align-items:center; gap:10px;">
+          <span>Regulatory Intelligence</span>
+          <span style="color:rgba(20,19,15,0.2);">/</span>
+          <span style="color:#8C887C;">Issue · Q3 2024</span>
+        </div>
+        <h1 style="margin:18px 0 0; font-size:clamp(38px,5.4vw,64px); font-weight:800; line-height:0.98; letter-spacing:-0.035em;">The rules, the technology,<br>and the gaps between them.</h1>
+        <p style="margin:22px 0 0; font-size:18px; line-height:1.6; color:#57544B; font-weight:450; max-width:640px;">A working reference for healthcare practitioners — thirty years of HIPAA read against the systems it governs, the breaches that reshaped it, and the questions AI is raising right now. Read it like an issue, or search straight to what you need.</p>
+
+        <!-- Persistent finder -->
+        <div style="margin-top:30px; display:flex; align-items:center; gap:12px; background:#FFFFFF; border:1px solid rgba(20,19,15,0.11); border-radius:12px; padding:4px 4px 4px 18px; max-width:560px; box-shadow:0 1px 2px rgba(20,19,15,0.04),0 16px 36px -30px rgba(20,19,15,0.3);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8C887C" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+          <input value="{{ q }}" onInput="{{ onSearch }}" placeholder="Search rules, breaches, CFR citations, AI topics…" style="flex:1; border:none; outline:none; background:transparent; font-family:'Archivo',sans-serif; font-size:15px; color:#14130F; padding:11px 0;" />
+          <kbd style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#8C887C; background:#F1EEE4; border:1px solid rgba(20,19,15,0.07); border-radius:6px; padding:5px 8px;">↵</kbd>
+        </div>
+
+        <!-- Quiet advisory (was the black pinging banner) -->
+        <div style="margin-top:20px; display:flex; gap:12px; align-items:flex-start; max-width:640px; border-left:2px solid var(--signal,#B0552F); padding:2px 0 2px 16px;">
+          <p style="margin:0; font-size:13.5px; line-height:1.55; color:#57544B;"><span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--signal,#B0552F);">Active advisory</span><br>After the Change Healthcare failures, OCR has intensified monitoring of third-party BAAs and supplier continuity plans under 45 CFR § 164.308(a)(7). <a href="#" style="color:#0A5C49; border-bottom:1px solid rgba(10,92,73,0.4);">HHS OCR portal ↗</a></p>
+        </div>
+      </section>
+
+      <!-- ── In this issue + side rail ───────────────────── -->
+      <div style="margin-top:64px; display:grid; grid-template-columns:1.55fr 1fr; gap:56px; align-items:start;">
+
+        <!-- Reading list -->
+        <div>
+          <div style="display:flex; align-items:baseline; justify-content:space-between; border-bottom:1px solid rgba(20,19,15,0.11); padding-bottom:12px;">
+            <h2 style="margin:0; font-size:15px; font-weight:700; letter-spacing:-0.01em;">In this issue</h2>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#8C887C;">{{ sectionCount }} tracks</span>
+          </div>
+
+          <sc-for list="{{ sections }}" as="s" hint-placeholder-count="3">
+            <a href="{{ s.href }}" style="display:grid; grid-template-columns:auto 1fr auto; gap:22px; align-items:start; padding:26px 6px 26px 0; border-bottom:1px solid rgba(20,19,15,0.07); text-decoration:none; color:inherit;">
+              <span style="font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:600; color:#8C887C; padding-top:4px;">{{ s.n }}</span>
+              <div>
+                <div style="display:flex; align-items:center; gap:9px;">
+                  <span style="width:8px; height:8px; border-radius:2px; background:{{ s.dotColor }};"></span>
+                  <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#8C887C;">{{ s.kind }}</span>
+                  <span style="color:rgba(20,19,15,0.2);">·</span>
+                  <span style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#8C887C;">{{ s.meta }}</span>
+                </div>
+                <h3 style="margin:9px 0 0; font-size:22px; font-weight:700; letter-spacing:-0.02em; line-height:1.15;">{{ s.title }}</h3>
+                <p style="margin:8px 0 0; font-size:15px; line-height:1.55; color:#57544B; max-width:52ch;">{{ s.dek }}</p>
+                <span style="display:inline-block; margin-top:12px; font-size:14px; font-weight:600; color:#0A5C49; border-bottom:2px solid var(--accent,#0E8A6E); padding-bottom:1px;">{{ s.cta }}</span>
+              </div>
+              <span style="align-self:center; color:#8C887C; font-size:20px;">→</span>
+            </a>
+          </sc-for>
+
+          <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+            <p style="font-family:'JetBrains Mono',monospace; font-size:13px; color:#8C887C; padding:28px 0;">No sections match “{{ q }}”. Try a rule number, an entity, or a topic like “pixel”.</p>
+          </sc-if>
+
+          <!-- Advisor utility -->
+          <a href="AI Advisor.dc.html" style="display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:26px; background:#14130F; color:#F4F1E8; border-radius:14px; padding:22px 26px; text-decoration:none;">
+            <div>
+              <div style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:#0E8A6E;">Ask the Regulatory Advisor</div>
+              <p style="margin:7px 0 0; font-size:14.5px; line-height:1.5; color:#C9C5B8; max-width:44ch;">Query edge-cases, BAA requirements, and cloud-compliance patterns in plain language.</p>
+            </div>
+            <span style="font-size:22px; color:#F4F1E8;">→</span>
+          </a>
+        </div>
+
+        <!-- Side rail -->
+        <aside style="display:flex; flex-direction:column; gap:32px; position:sticky; top:88px;">
+
+          <!-- Featured nudge -->
+          <div style="background:#FFFFFF; border:1px solid rgba(20,19,15,0.11); border-radius:14px; overflow:hidden; box-shadow:0 1px 2px rgba(20,19,15,0.04),0 16px 36px -30px rgba(20,19,15,0.28);">
+            <div style="height:96px; background:repeating-linear-gradient(135deg,#FAF8F2,#FAF8F2 11px,#F1EEE4 11px,#F1EEE4 22px); border-bottom:1px solid rgba(20,19,15,0.07); display:flex; align-items:flex-end; padding:12px 16px;">
+              <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#0A5C49; background:#F4F1E8; border:1px solid rgba(20,19,15,0.09); border-radius:6px; padding:4px 9px;">New this quarter</span>
+            </div>
+            <div style="padding:20px;">
+              <h3 style="margin:0; font-size:18px; font-weight:700; letter-spacing:-0.015em; line-height:1.2;">Ambient AI scribes are the new ePHI perimeter</h3>
+              <p style="margin:9px 0 0; font-size:14px; line-height:1.55; color:#57544B;">Voice prints are bio-identifiers. Shadow-AI transcription without a signed BAA is a documentable breach — here’s the exposure.</p>
+              <a href="Latest Intelligence.dc.html" style="display:inline-block; margin-top:14px; font-size:13.5px; font-weight:600; color:#0A5C49; border-bottom:2px solid var(--accent,#0E8A6E); padding-bottom:1px;">Read the briefing →</a>
+            </div>
+          </div>
+
+          <!-- Statutory foundations -->
+          <div>
+            <div style="display:flex; align-items:baseline; justify-content:space-between; border-bottom:1px solid rgba(20,19,15,0.11); padding-bottom:11px; margin-bottom:6px;">
+              <h2 style="margin:0; font-size:15px; font-weight:700;">Statutory foundations</h2>
+              <span style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#8C887C;">Reference</span>
+            </div>
+            <sc-for list="{{ foundations }}" as="f" hint-placeholder-count="3">
+              <a href="#" style="display:block; padding:16px 0; border-bottom:1px solid rgba(20,19,15,0.07); text-decoration:none; color:inherit;">
+                <div style="display:flex; align-items:baseline; justify-content:space-between; gap:12px;">
+                  <span style="font-size:15px; font-weight:700;">{{ f.title }}</span>
+                  <span style="font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#8C887C; white-space:nowrap;">{{ f.cfr }}</span>
+                </div>
+                <p style="margin:6px 0 0; font-size:13.5px; line-height:1.5; color:#57544B;">{{ f.body }}</p>
+              </a>
+            </sc-for>
+          </div>
+        </aside>
+      </div>
+
+      <!-- ── Primer ──────────────────────────────────────── -->
+      <sc-if value="{{ hasPrimer }}" hint-placeholder-val="{{ true }}">
+        <section style="margin-top:80px;">
+          <div style="display:flex; align-items:baseline; justify-content:space-between; border-bottom:1px solid rgba(20,19,15,0.11); padding-bottom:12px;">
+            <h2 style="margin:0; font-size:15px; font-weight:700;">A short primer</h2>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#8C887C;">Framework basics</span>
+          </div>
+          <div style="margin-top:28px; display:grid; grid-template-columns:1fr 1fr; gap:40px 56px;">
+            <sc-for list="{{ primer }}" as="p" hint-placeholder-count="4">
+              <div>
+                <h3 style="margin:0; font-size:16px; font-weight:700; letter-spacing:-0.01em;">{{ p.q }}</h3>
+                <p style="margin:10px 0 0; font-size:14.5px; line-height:1.6; color:#57544B;">{{ p.a }}</p>
+              </div>
+            </sc-for>
+          </div>
+        </section>
+      </sc-if>
+
+    </main>
+
+    <!-- ── Footer ──────────────────────────────────────── -->
+    <footer style="border-top:1px solid rgba(20,19,15,0.11); background:rgba(250,248,242,0.6);">
+      <div style="max-width:1180px; margin:0 auto; padding:32px; display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:20px;">
+        <div>
+          <div style="font-weight:800; font-size:14px; letter-spacing:0.06em;">HIPAA·WATCH</div>
+          <p style="margin:6px 0 0; font-size:13px; color:#8C887C; font-family:'JetBrains Mono',monospace;">Source: HHS.gov / OCR archives · 45 CFR Parts 160 &amp; 164 · Public Law 104-191</p>
+        </div>
+        <p style="margin:0; font-size:12.5px; color:#8C887C; max-width:38ch; text-align:right;">Educational reference. Not legal advice. Verify against primary HHS sources before acting.</p>
+      </div>
+    </footer>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;accent&quot;: { &quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#0E8A6E&quot;, &quot;options&quot;: [&quot;#0E8A6E&quot;, &quot;#2A5FA8&quot;, &quot;#7A4CC0&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Theme&quot; },
+  &quot;signal&quot;: { &quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#B0552F&quot;, &quot;options&quot;: [&quot;#B0552F&quot;, &quot;#A6461D&quot;, &quot;#8A6D00&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Theme&quot; },
+  &quot;showTexture&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Theme&quot; },
+  &quot;density&quot;: { &quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;comfortable&quot;, &quot;options&quot;: [&quot;comfortable&quot;, &quot;compact&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Layout&quot; }
+}">
+class Component extends DCLogic {
+  state = { q: "" };
+
+  sectionsData = [
+    { n: "01", kind: "Timeline", tone: "accent", meta: "1996 – 2026", href: "Timeline.dc.html", title: "The Comparative Timeline", dek: "Thirty years of federal rulemaking read against the technology it was meant to govern — paper charts to cloud APIs — and the vulnerability each shift introduced.", cta: "Trace the timeline" },
+    { n: "02", kind: "Intelligence", tone: "neutral", meta: "Active frontier", href: "Latest Intelligence.dc.html", title: "2026 Compliance Intelligence", dek: "The live edge: ambient AI scribes, the reproductive-health privacy rule, tracking-pixel litigation, and information-blocking enforcement.", cta: "Read the latest" },
+    { n: "03", kind: "Breaches", tone: "signal", meta: "Case analyses", href: "Breaches.dc.html", title: "Breaches & Outages, Deep-Dive", dek: "What actually went wrong at Anthem, Change Healthcare, and Hollywood Presbyterian — root cause, the OCR response, and the lesson that outlived it.", cta: "Examine the cases" },
+  ];
+
+  foundationsData = [
+    { title: "The Privacy Rule", cfr: "45 CFR 160 · 164(A,E)", body: "Governs use and disclosure of PHI, and patients' right to access and amend their records." },
+    { title: "The Security Rule", cfr: "45 CFR 164(C)", body: "Administrative, physical, and technical safeguards for electronic PHI — risk analysis to encryption." },
+    { title: "Breach Notification Rule", cfr: "45 CFR 164(D)", body: "Notify patients, HHS, and (over 500 records) the media within 60 days of an unencrypted ePHI compromise." },
+  ];
+
+  primerData = [
+    { q: "Who counts as a Business Associate?", a: "Any third party — cloud storage, AI transcription vendors, clearinghouses, analytics tools — that creates, receives, maintains, or transmits PHI for a covered entity. They must sign a BAA." },
+    { q: "What is the 'minimum necessary' standard?", a: "Under 45 CFR § 164.502(b), when using or disclosing PHI you must limit it to the least data required to accomplish the task." },
+    { q: "Why are voice transcripts a compliance risk?", a: "Voice files and transcripts carry biometric and clinical markers, so they are ePHI. Storing them unencrypted on consumer platforms is an immediate Security Rule breach." },
+    { q: "What is the 'consumer app loophole'?", a: "Once a patient authorizes a non-covered app to pull records via FHIR, that data leaves HIPAA's protection — the developer can resell it. A frequent source of patient confusion." },
+  ];
+
+  toneColor(tone) {
+    if (tone === "signal") return this.props.signal ?? "#B0552F";
+    if (tone === "neutral") return "#3A3A46";
+    return this.props.accent ?? "#0E8A6E";
+  }
+
+  filt(arr, fields) {
+    const q = (this.state.q || "").trim().toLowerCase();
+    if (!q) return arr;
+    return arr.filter(o => fields.some(f => (o[f] || "").toLowerCase().includes(q)));
+  }
+
+  renderVals() {
+    const sections = this.filt(this.sectionsData, ["kind", "meta", "title", "dek"])
+      .map(s => ({ ...s, dotColor: this.toneColor(s.tone) }));
+    const foundations = this.filt(this.foundationsData, ["title", "cfr", "body"]);
+    const primer = this.filt(this.primerData, ["q", "a"]);
+    const padY = (this.props.density === "compact") ? "40px" : "64px";
+    return {
+      q: this.state.q,
+      onSearch: (e) => this.setState({ q: e.target.value }),
+      accent: this.props.accent ?? "#0E8A6E",
+      signal: this.props.signal ?? "#B0552F",
+      showTexture: this.props.showTexture ?? true,
+      padY,
+      sections,
+      foundations,
+      primer,
+      sectionCount: this.sectionsData.length,
+      noResults: sections.length === 0,
+      hasPrimer: primer.length > 0,
+    };
+  }
+}
+</script>
+</body>
+</html>

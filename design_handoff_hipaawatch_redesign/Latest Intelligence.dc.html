@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; }
+    *, *::before, *::after { box-sizing: border-box; }
+    ::selection { background: #0E8A6E; color: #F4F1E8; }
+    .li-article a.inline { color:#0A5C49; border-bottom:1px solid rgba(10,92,73,0.35); }
+    details > summary { list-style:none; cursor:pointer; }
+    details > summary::-webkit-details-marker { display:none; }
+    html { scroll-behavior:smooth; }
+  </style>
+</helmet>
+
+<div style="min-height:100vh; position:relative; background:#F4F1E8; color:#14130F; font-family:'Archivo','Helvetica Neue',Arial,sans-serif; -webkit-font-smoothing:antialiased; --accent:{{accent}}; --signal:{{signal}};">
+
+  <sc-if value="{{ showTexture }}" hint-placeholder-val="{{ true }}">
+    <div style="position:fixed; inset:0; pointer-events:none; z-index:0; background-image:linear-gradient(rgba(20,19,15,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(20,19,15,0.04) 1px,transparent 1px); background-size:34px 34px; -webkit-mask-image:radial-gradient(120% 90% at 50% 0%,#000 50%,transparent 100%); mask-image:radial-gradient(120% 90% at 50% 0%,#000 50%,transparent 100%);"></div>
+  </sc-if>
+
+  <div style="position:relative; z-index:1;">
+
+    <!-- ── Nav ─────────────────────────────────────────── -->
+    <header style="position:sticky; top:0; z-index:20; backdrop-filter:saturate(140%) blur(8px); -webkit-backdrop-filter:saturate(140%) blur(8px); background:rgba(244,241,232,0.82); border-bottom:1px solid rgba(20,19,15,0.07);">
+      <div style="max-width:1240px; margin:0 auto; padding:15px 32px; display:flex; align-items:center; justify-content:space-between; gap:24px;">
+        <div style="display:flex; align-items:baseline; gap:12px;">
+          <a href="Dashboard.dc.html" style="font-weight:800; font-size:15px; letter-spacing:0.06em; color:#14130F; text-decoration:none;">HIPAA<span style="color:var(--accent,#0E8A6E);">·</span>WATCH</a>
+          <span style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#8C887C; letter-spacing:0.04em;">Compliance &amp; Technology</span>
+        </div>
+        <nav style="display:flex; align-items:center; gap:26px;">
+          <a href="Dashboard.dc.html" style="font-size:14px; font-weight:500; color:#57544B; text-decoration:none;">Overview</a>
+          <a href="#" style="font-size:14px; font-weight:500; color:#57544B; text-decoration:none;">Timeline</a>
+          <a href="#" style="font-size:14px; font-weight:600; color:#14130F; padding-bottom:2px; border-bottom:2px solid var(--accent,#0E8A6E); text-decoration:none;">Intelligence</a>
+          <a href="#" style="font-size:14px; font-weight:500; color:#57544B; text-decoration:none;">Breaches</a>
+          <a href="#" style="font-size:14px; font-weight:600; color:#0A5C49; text-decoration:none;">Advisor →</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- ── Section head ────────────────────────────────── -->
+    <div style="max-width:1240px; margin:0 auto; padding:44px 32px 0;">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#8C887C; letter-spacing:0.06em;"><a href="Dashboard.dc.html" style="color:#8C887C; text-decoration:none;">Overview</a> &nbsp;/&nbsp; <span style="color:#14130F;">Intelligence</span></div>
+      <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:32px; flex-wrap:wrap; margin-top:14px; border-bottom:1px solid rgba(20,19,15,0.11); padding-bottom:26px;">
+        <div style="max-width:640px;">
+          <h1 style="margin:0; font-size:clamp(30px,3.8vw,44px); font-weight:800; letter-spacing:-0.03em; line-height:1.0;">2026 Compliance Intelligence</h1>
+          <p style="margin:14px 0 0; font-size:17px; line-height:1.55; color:#57544B;">The live edge of HIPAA — where new rules, new technology, and old blindspots meet. Four briefings, updated each quarter.</p>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px; background:#FFFFFF; border:1px solid rgba(20,19,15,0.11); border-radius:10px; padding:3px 3px 3px 14px; box-shadow:0 1px 2px rgba(20,19,15,0.04);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8C887C" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+          <input value="{{ q }}" onInput="{{ onSearch }}" placeholder="Filter briefings…" style="border:none; outline:none; background:transparent; font-family:'Archivo',sans-serif; font-size:14px; color:#14130F; padding:9px 0; width:180px;" />
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Three-column reading layout ─────────────────── -->
+    <div style="max-width:1240px; margin:0 auto; padding:36px 32px 96px; display:grid; grid-template-columns:250px minmax(0,1fr) 220px; gap:48px; align-items:start;">
+
+      <!-- LEFT: issue contents -->
+      <aside style="position:sticky; top:88px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:#8C887C; margin-bottom:10px;">Issue contents</div>
+        <sc-for list="{{ contents }}" as="c" hint-placeholder-count="4">
+          <button onClick="{{ c.onClick }}" style="display:block; width:100%; text-align:left; border:none; background:{{ c.bg }}; cursor:pointer; padding:14px 14px 14px 15px; border-left:2px solid {{ c.edge }}; margin-bottom:4px; border-radius:0 8px 8px 0;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="width:7px; height:7px; border-radius:2px; background:{{ c.dotColor }};"></span>
+              <span style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:#8C887C;">{{ c.kind }}</span>
+            </div>
+            <div style="margin-top:6px; font-size:14px; font-weight:600; line-height:1.25; color:{{ c.titleColor }};">{{ c.title }}</div>
+          </button>
+        </sc-for>
+        <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+          <p style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#8C887C; padding:8px 2px;">No briefing matches “{{ q }}”.</p>
+        </sc-if>
+      </aside>
+
+      <!-- CENTER: article -->
+      <article class="li-article" style="max-width:680px;">
+        <div style="display:flex; align-items:center; gap:10px; font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:0.04em;">
+          <span style="display:inline-flex; align-items:center; gap:7px; color:{{ active.dotColor }}; font-weight:600; text-transform:uppercase;"><span style="width:8px; height:8px; border-radius:2px; background:{{ active.dotColor }};"></span>{{ active.kind }}</span>
+          <span style="color:rgba(20,19,15,0.2);">·</span>
+          <span style="color:#8C887C;">{{ active.status }}</span>
+        </div>
+
+        <h2 style="margin:16px 0 0; font-size:clamp(30px,3.6vw,40px); font-weight:800; letter-spacing:-0.03em; line-height:1.04;">{{ active.title }}</h2>
+        <p style="margin:16px 0 0; font-family:'Newsreader',Georgia,serif; font-size:21px; line-height:1.5; color:#3A382F; font-style:italic;">{{ active.dek }}</p>
+
+        <div style="display:flex; align-items:center; gap:16px; margin-top:20px; padding-bottom:26px; border-bottom:1px solid rgba(20,19,15,0.11); font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#8C887C;">
+          <span>{{ active.readTime }} min read</span>
+          <span style="color:rgba(20,19,15,0.2);">·</span>
+          <span>{{ active.citeCount }} CFR references</span>
+          <span style="color:rgba(20,19,15,0.2);">·</span>
+          <span>Updated Q3 2024</span>
+        </div>
+
+        <!-- Body -->
+        <div id="situation" style="scroll-margin-top:90px; padding-top:30px;">
+          <p style="margin:0; font-family:'Newsreader',Georgia,serif; font-size:19px; line-height:1.72; color:#14130F;">{{ active.lead }}</p>
+          <p style="margin:20px 0 0; font-family:'Newsreader',Georgia,serif; font-size:19px; line-height:1.72; color:#2B2A24;">{{ active.whatItIs }}</p>
+        </div>
+
+        <div id="ai" style="scroll-margin-top:90px; padding-top:38px;">
+          <h3 style="margin:0; font-size:14px; font-weight:700; letter-spacing:0.02em; text-transform:uppercase; color:#14130F; display:flex; align-items:center; gap:10px;"><span style="width:22px; height:2px; background:var(--accent,#0E8A6E);"></span>How AI changes the exposure</h3>
+          <p style="margin:16px 0 0; font-family:'Newsreader',Georgia,serif; font-size:19px; line-height:1.72; color:#2B2A24;">{{ active.aiAngle }}</p>
+        </div>
+
+        <!-- The one signal moment: the blindspot -->
+        <div id="blindspot" style="scroll-margin-top:90px; margin-top:38px; border-left:3px solid var(--signal,#B0552F); background:rgba(176,85,47,0.04); border-radius:0 12px 12px 0; padding:22px 24px;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--signal,#B0552F);">The administrator’s blindspot</div>
+          <p style="margin:12px 0 0; font-size:16.5px; line-height:1.6; color:#2B2A24; font-weight:450;">{{ active.blindspot }}</p>
+        </div>
+
+        <!-- Practice note -->
+        <div style="margin-top:22px; border-left:3px solid var(--accent,#0E8A6E); background:rgba(14,138,110,0.045); border-radius:0 12px 12px 0; padding:22px 24px;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#0A5C49;">In practice</div>
+          <p style="margin:12px 0 0; font-size:16.5px; line-height:1.6; color:#2B2A24;">{{ active.practice }}</p>
+        </div>
+
+        <!-- Progressive disclosure: references -->
+        <details id="refs" style="scroll-margin-top:90px; margin-top:38px; border-top:1px solid rgba(20,19,15,0.11); padding-top:22px;">
+          <summary style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+            <span style="font-size:14px; font-weight:700;">Statutory references &amp; official sources</span>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#8C887C;">{{ active.citeCount }} citations · tap to open</span>
+          </summary>
+          <div style="margin-top:18px;">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:10.5px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:#8C887C; margin-bottom:10px;">CFR codifications</div>
+            <div style="display:flex; flex-wrap:wrap; gap:8px;">
+              <sc-for list="{{ active.citations }}" as="cit" hint-placeholder-count="3">
+                <span style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#14130F; background:#FFFFFF; border:1px solid rgba(20,19,15,0.11); padding:6px 11px; border-radius:7px;">{{ cit }}</span>
+              </sc-for>
+            </div>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:10.5px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:#8C887C; margin:20px 0 10px;">Verified HHS sources</div>
+            <sc-for list="{{ active.sources }}" as="src" hint-placeholder-count="1">
+              <a href="{{ src.url }}" target="_blank" rel="noopener noreferrer" style="display:flex; gap:10px; align-items:flex-start; padding:10px 0; text-decoration:none;">
+                <span style="color:#0A5C49; font-size:14px; margin-top:1px;">↗</span>
+                <span><span style="font-size:14px; font-weight:600; color:#0A5C49;">{{ src.label }}</span><span style="display:block; font-size:12.5px; color:#8C887C; margin-top:2px;">{{ src.desc }}</span></span>
+              </a>
+            </sc-for>
+          </div>
+        </details>
+
+        <!-- Related / continue reading -->
+        <div style="margin-top:44px; border-top:1px solid rgba(20,19,15,0.11); padding-top:24px;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:#8C887C; margin-bottom:14px;">Continue reading</div>
+          <sc-for list="{{ active.related }}" as="r" hint-placeholder-count="2">
+            <button onClick="{{ r.onClick }}" style="display:flex; width:100%; align-items:center; justify-content:space-between; gap:16px; text-align:left; border:none; background:transparent; cursor:pointer; padding:16px 6px 16px 0; border-bottom:1px solid rgba(20,19,15,0.07);">
+              <span>
+                <span style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:{{ r.dotColor }};">{{ r.kind }}</span>
+                <span style="display:block; font-size:16px; font-weight:600; color:#14130F; margin-top:4px;">{{ r.title }}</span>
+              </span>
+              <span style="color:#8C887C; font-size:18px;">→</span>
+            </button>
+          </sc-for>
+        </div>
+      </article>
+
+      <!-- RIGHT: on this page + next -->
+      <aside style="position:sticky; top:88px; display:flex; flex-direction:column; gap:26px;">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:#8C887C; margin-bottom:12px;">On this page</div>
+          <nav style="display:flex; flex-direction:column; gap:2px; border-left:1px solid rgba(20,19,15,0.11);">
+            <a href="#situation" style="font-size:13px; color:#57544B; text-decoration:none; padding:6px 0 6px 14px; margin-left:-1px; border-left:2px solid transparent;">The situation</a>
+            <a href="#ai" style="font-size:13px; color:#57544B; text-decoration:none; padding:6px 0 6px 14px; margin-left:-1px; border-left:2px solid transparent;">How AI changes it</a>
+            <a href="#blindspot" style="font-size:13px; color:var(--signal,#B0552F); font-weight:600; text-decoration:none; padding:6px 0 6px 14px; margin-left:-1px; border-left:2px solid var(--signal,#B0552F);">The blindspot</a>
+            <a href="#refs" style="font-size:13px; color:#57544B; text-decoration:none; padding:6px 0 6px 14px; margin-left:-1px; border-left:2px solid transparent;">References</a>
+          </nav>
+        </div>
+
+        <a href="Dashboard.dc.html" style="display:block; background:#14130F; color:#F4F1E8; border-radius:12px; padding:18px; text-decoration:none;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:#0E8A6E;">Next in issue →</div>
+          <div style="margin-top:8px; font-size:15px; font-weight:600; line-height:1.25;">Breaches &amp; Outages, Deep-Dive</div>
+          <p style="margin:7px 0 0; font-size:12.5px; line-height:1.45; color:#C9C5B8;">Mass General, Anthem, Change Healthcare — what went wrong.</p>
+        </a>
+      </aside>
+
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;accent&quot;: { &quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#0E8A6E&quot;, &quot;options&quot;: [&quot;#0E8A6E&quot;, &quot;#2A5FA8&quot;, &quot;#7A4CC0&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Theme&quot; },
+  &quot;signal&quot;: { &quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#B0552F&quot;, &quot;options&quot;: [&quot;#B0552F&quot;, &quot;#A6461D&quot;, &quot;#8A6D00&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Theme&quot; },
+  &quot;showTexture&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Theme&quot; }
+}">
+class Component extends DCLogic {
+  state = { activeId: "reproductive", q: "" };
+
+  topics = [
+    {
+      id: "reproductive", kind: "Regulatory", tone: "accent",
+      status: "Final rule · compliance Dec 2024–25",
+      title: "The reproductive-health privacy rule",
+      dek: "OCR moved to cut the pipeline that was quietly turning medical records into criminal evidence.",
+      lead: "In 2024 the Office for Civil Rights finalized an amendment to the HIPAA Privacy Rule with a narrow but consequential aim: stop covered entities from handing protected health information to investigators pursuing lawful reproductive care.",
+      whatItIs: "Under 45 CFR § 164.502(a)(5)(iii), a covered entity may not use or disclose PHI to investigate or prosecute any person for seeking, obtaining, providing, or facilitating lawful reproductive health care — and must obtain a signed attestation before releasing records that might be requested for those purposes.",
+      aiAngle: "The rule exists because the pipeline is now automated. Investigators increasingly lean on predictive analytics and geofencing over digital tracker and location data. By blocking disclosure at the covered-entity boundary, the rule severs the chain before that data can be assembled into a case.",
+      blindspot: "Administrators who don't push the change downstream into Business Associate Agreements — and who lack a written procedure to filter subpoenas — risk an accidental, non-compliant disclosure the very first time a request arrives.",
+      practice: "Update BAAs to reflect the new prohibition, add an attestation checkpoint to any records request, and train intake staff to route reproductive-care subpoenas straight to counsel.",
+      citations: ["45 CFR § 164.502(a)(5)(iii)", "45 CFR § 164.512", "89 FR — HHS Privacy Rule Modification"],
+      sources: [{ label: "HHS OCR Final Rule Bulletin", url: "https://www.hhs.gov/hipaa/for-professionals/privacy/guidance/reproductive-health-care-privacy/index.html", desc: "Official HHS Department rule portal." }],
+      related: ["ambient", "pixels"],
+    },
+    {
+      id: "ambient", kind: "Technology", tone: "neutral",
+      status: "Rapid adoption · 2024–2026",
+      title: "Ambient AI scribes are the new ePHI perimeter",
+      dek: "The tool that ends physician note-taking also opens the widest new door for protected data in a decade.",
+      lead: "Ambient clinical AI listens to the doctor-patient conversation in real time and uses large language models to write structured notes and diagnostic codes straight into the EHR. It measurably reduces burnout — and it quietly relocates the boundary of where ePHI lives.",
+      whatItIs: "Because voice prints are biometric identifiers, both the raw audio and the transcript are ePHI the moment they are captured. Parsing them requires rigorous encryption, explicit patient notice, and an airtight Business Associate Agreement with the AI vendor before a single visit is recorded.",
+      aiAngle: "The exposure is rarely the sanctioned enterprise tool — it's shadow AI. A clinician using a consumer-grade transcription app or browser extension is handing raw recordings to a platform that stores and trains on them, with no BAA and no data isolation.",
+      blindspot: "Staff adopt convenient consumer apps faster than IT can inventory them. Without an approved-tool list and active monitoring, the first audit finds transcripts sitting on a vendor's training servers.",
+      practice: "Verify the tool is HIPAA-compliant, guarantees storage and transit encryption, and has a signed BAA before it ingests any patient interaction. Publish an approved-tool list and enforce it.",
+      citations: ["45 CFR § 164.312(a)(2)(iv) — Encryption", "45 CFR § 164.502(b) — Minimum Necessary"],
+      sources: [{ label: "ONC HTI-1 Algorithm Transparency Guidance", url: "https://www.healthit.gov/topic/laws-regulations-and-policy/health-it-certification-program-0/hti-1-final-rule", desc: "ONC transparency rules for predictive algorithms in certified health IT." }],
+      related: ["reproductive", "blocking"],
+    },
+    {
+      id: "blocking", kind: "Ethical / Legal", tone: "signal",
+      status: "Active enforcement · audit expansion",
+      title: "Information blocking & the consumer-app void",
+      dek: "The law that guarantees patients their records also strips those records of HIPAA's protection the instant they leave.",
+      lead: "The 21st Century Cures Act requires health systems to give patients fast, open access to their records through secure FHIR APIs, without 'information blocking'. It succeeded — and in succeeding, it created a legal boundary problem no one fully controls.",
+      whatItIs: "FHIR-powered APIs let patient-facing apps request an entire clinical record instantly. But once a patient authorizes a non-covered commercial app to pull that data, the record is no longer protected by HIPAA — the app's developer can lawfully resell it to ad networks.",
+      aiAngle: "AI health managers and diagnostic aggregators are the apps doing the pulling, and their business model often depends on the very data flows HIPAA would have blocked. The responsibility for safety shifts from a regulated hospital to an individual's tap on 'Allow'.",
+      blindspot: "Practitioners field the confusion but can't fix it: patients assume 'my hospital shared it, so it's still protected'. Failing to explain the handoff clearly erodes trust and invites complaints.",
+      practice: "Honor access requests promptly, but pair the FHIR handoff with plain-language notice that HIPAA protection ends once data reaches a non-covered app. Document that the notice was given.",
+      citations: ["45 CFR Part 171 — Information Blocking", "45 CFR Part 170 — Health IT Certification"],
+      sources: [{ label: "HHS ONC Information Blocking Portal", url: "https://www.healthit.gov/topic/information-blocking", desc: "ONC reference on exceptions and API standards." }],
+      related: ["pixels", "ambient"],
+    },
+    {
+      id: "pixels", kind: "Ethical / Legal", tone: "signal",
+      status: "Ongoing litigation · OCR bulletins",
+      title: "Web analytics, ad targeting & the pixel trap",
+      dek: "A single line of tracking script on a booking page can be a reportable breach — and thousands of sites still run one.",
+      lead: "Following the December 2022 OCR bulletin and the litigation that came after it, regulators have held firm: third-party trackers that capture identifiers on patient-facing pages can transmit protected health information to ad companies without authorization.",
+      whatItIs: "Pixels from Google, Meta, or Hotjar embedded on booking widgets, intake portals, or symptom pages silently transmit IP addresses, device IDs, and interaction detail back to consumer ad platforms — with no BAA in place. OCR's position is that this constitutes a disclosure of PHI.",
+      aiAngle: "Marketing AI and customer-data platforms optimize medical advertising against exactly these signals — booking a consultation, reading a symptom page — which is precisely what makes the captured data valuable, and precisely what makes the transmission a violation.",
+      blindspot: "Marketing teams add analytics scripts without a compliance review, assuming an IP address is anonymous. It isn't, on a health page — and the audit trail leads straight back to the covered entity.",
+      practice: "Inventory every third-party script on patient-facing pages, remove or BAA-cover any that transmit identifiers, and put marketing-tag changes behind a compliance gate.",
+      citations: ["45 CFR § 164.502(a)", "45 CFR § 164.508 — Patient Authorization"],
+      sources: [{ label: "OCR Online Tracking Technologies Bulletin", url: "https://www.hhs.gov/hipaa/for-professionals/privacy/guidance/tracking-technologies/index.html", desc: "OCR guidance restricting ad-network tracking pixels." }],
+      related: ["blocking", "reproductive"],
+    },
+  ];
+
+  toneColor(tone) {
+    if (tone === "signal") return this.props.signal ?? "#B0552F";
+    if (tone === "neutral") return "#3A3A46";
+    return this.props.accent ?? "#0E8A6E";
+  }
+
+  readTime(t) {
+    const words = [t.lead, t.whatItIs, t.aiAngle, t.blindspot, t.practice].join(" ").split(/\s+/).length;
+    return Math.max(2, Math.round(words / 160));
+  }
+
+  renderVals() {
+    const q = (this.state.q || "").trim().toLowerCase();
+    const byId = (id) => this.topics.find(t => t.id === id);
+    const select = (id) => () => { this.setState({ activeId: id }); if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" }); };
+
+    const active0 = byId(this.state.activeId) || this.topics[0];
+    const active = {
+      ...active0,
+      dotColor: this.toneColor(active0.tone),
+      readTime: this.readTime(active0),
+      citeCount: active0.citations.length,
+      related: active0.related.map(byId).filter(Boolean).map(r => ({
+        title: r.title, kind: r.kind, dotColor: this.toneColor(r.tone), onClick: select(r.id),
+      })),
+    };
+
+    const match = (t) => !q || [t.kind, t.title, t.dek, t.whatItIs, t.aiAngle, t.blindspot].some(f => (f || "").toLowerCase().includes(q));
+    const contents = this.topics.filter(match).map(t => {
+      const isActive = t.id === active0.id;
+      return {
+        title: t.title, kind: t.kind, dotColor: this.toneColor(t.tone),
+        bg: isActive ? "rgba(14,138,110,0.06)" : "transparent",
+        edge: isActive ? (this.props.accent ?? "#0E8A6E") : "rgba(20,19,15,0.09)",
+        titleColor: isActive ? "#14130F" : "#57544B",
+        onClick: select(t.id),
+      };
+    });
+
+    return {
+      q: this.state.q,
+      onSearch: (e) => this.setState({ q: e.target.value }),
+      accent: this.props.accent ?? "#0E8A6E",
+      signal: this.props.signal ?? "#B0552F",
+      showTexture: this.props.showTexture ?? true,
+      active,
+      contents,
+      noResults: contents.length === 0,
+    };
+  }
+}
+</script>
+</body>
+</html>

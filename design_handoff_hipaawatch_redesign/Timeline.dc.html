@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; }
+    *, *::before, *::after { box-sizing: border-box; }
+    ::selection { background: #0E8A6E; color: #F4F1E8; }
+    html { scroll-behavior:smooth; }
+    details > summary { list-style:none; cursor:pointer; }
+    details > summary::-webkit-details-marker { display:none; }
+    .tl-spine::-webkit-scrollbar { height:0; }
+  </style>
+</helmet>
+
+<div style="min-height:100vh; position:relative; background:#F4F1E8; color:#14130F; font-family:'Archivo','Helvetica Neue',Arial,sans-serif; -webkit-font-smoothing:antialiased; --accent:{{accent}}; --signal:{{signal}};">
+
+  <sc-if value="{{ showTexture }}" hint-placeholder-val="{{ true }}">
+    <div style="position:fixed; inset:0; pointer-events:none; z-index:0; background-image:linear-gradient(rgba(20,19,15,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(20,19,15,0.04) 1px,transparent 1px); background-size:34px 34px; -webkit-mask-image:radial-gradient(120% 90% at 50% 0%,#000 50%,transparent 100%); mask-image:radial-gradient(120% 90% at 50% 0%,#000 50%,transparent 100%);"></div>
+  </sc-if>
+
+  <div style="position:relative; z-index:1;">
+
+    <!-- ── Nav ─────────────────────────────────────────── -->
+    <header style="position:sticky; top:0; z-index:20; backdrop-filter:saturate(140%) blur(8px); -webkit-backdrop-filter:saturate(140%) blur(8px); background:rgba(244,241,232,0.82); border-bottom:1px solid rgba(20,19,15,0.07);">
+      <div style="max-width:1240px; margin:0 auto; padding:15px 32px; display:flex; align-items:center; justify-content:space-between; gap:24px;">
+        <div style="display:flex; align-items:baseline; gap:12px;">
+          <a href="Dashboard.dc.html" style="font-weight:800; font-size:15px; letter-spacing:0.06em; color:#14130F; text-decoration:none;">HIPAA<span style="color:var(--accent,#0E8A6E);">·</span>WATCH</a>
+          <span style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#8C887C; letter-spacing:0.04em;">Compliance &amp; Technology</span>
+        </div>
+        <nav style="display:flex; align-items:center; gap:26px;">
+          <a href="Dashboard.dc.html" style="font-size:14px; font-weight:500; color:#57544B; text-decoration:none;">Overview</a>
+          <a href="Timeline.dc.html" style="font-size:14px; font-weight:600; color:#14130F; padding-bottom:2px; border-bottom:2px solid var(--accent,#0E8A6E); text-decoration:none;">Timeline</a>
+          <a href="Latest Intelligence.dc.html" style="font-size:14px; font-weight:500; color:#57544B; text-decoration:none;">Intelligence</a>
+          <a href="Breaches.dc.html" style="font-size:14px; font-weight:500; color:#57544B; text-decoration:none;">Breaches</a>
+          <a href="AI Advisor.dc.html" style="font-size:14px; font-weight:600; color:#0A5C49; text-decoration:none;">Advisor →</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- ── Section head ────────────────────────────────── -->
+    <div style="max-width:1240px; margin:0 auto; padding:44px 32px 0;">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#8C887C; letter-spacing:0.06em;"><a href="Dashboard.dc.html" style="color:#8C887C; text-decoration:none;">Overview</a> &nbsp;/&nbsp; <span style="color:#14130F;">Timeline</span></div>
+      <div style="margin-top:14px; max-width:680px;">
+        <h1 style="margin:0; font-size:clamp(30px,3.8vw,44px); font-weight:800; letter-spacing:-0.03em; line-height:1.0;">The comparative timeline</h1>
+        <p style="margin:14px 0 0; font-size:17px; line-height:1.55; color:#57544B;">Thirty years of HIPAA, read in three parallel tracks — the law, the technology it was governing, and the blindspot each era left behind. Pick a year to line them up.</p>
+      </div>
+    </div>
+
+    <!-- ── Era spine ───────────────────────────────────── -->
+    <div style="position:sticky; top:57px; z-index:15; background:rgba(244,241,232,0.9); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); border-bottom:1px solid rgba(20,19,15,0.09); margin-top:28px;">
+      <div class="tl-spine" style="max-width:1240px; margin:0 auto; padding:20px 32px 16px; overflow-x:auto;">
+        <div style="position:relative; display:flex; justify-content:space-between; min-width:640px;">
+          <div style="position:absolute; left:0; right:0; top:5px; height:1px; background:rgba(20,19,15,0.14);"></div>
+          <sc-for list="{{ spine }}" as="e" hint-placeholder-count="9">
+            <button onClick="{{ e.onClick }}" style="position:relative; z-index:1; display:flex; flex-direction:column; align-items:center; gap:8px; border:none; background:transparent; cursor:pointer; padding:0;">
+              <span style="width:11px; height:11px; border-radius:50%; background:{{ e.dotBg }}; border:2px solid {{ e.dotBorder }}; box-shadow:0 0 0 4px #F4F1E8;"></span>
+              <span style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:{{ e.weight }}; color:{{ e.color }};">{{ e.year }}</span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Three-column reading layout ─────────────────── -->
+    <div style="max-width:1240px; margin:0 auto; padding:36px 32px 96px; display:grid; grid-template-columns:230px minmax(0,1fr) 200px; gap:48px; align-items:start;">
+
+      <!-- LEFT: era list -->
+      <aside style="position:sticky; top:132px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:#8C887C; margin-bottom:10px;">Eras · {{ eraCount }}</div>
+        <sc-for list="{{ eraList }}" as="e" hint-placeholder-count="9">
+          <button onClick="{{ e.onClick }}" style="display:block; width:100%; text-align:left; border:none; background:{{ e.bg }}; cursor:pointer; padding:12px 12px 12px 13px; border-left:2px solid {{ e.edge }}; margin-bottom:3px; border-radius:0 8px 8px 0;">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:600; color:{{ e.yearColor }};">{{ e.year }}</div>
+            <div style="margin-top:3px; font-size:12.5px; font-weight:500; line-height:1.3; color:{{ e.titleColor }};">{{ e.short }}</div>
+          </button>
+        </sc-for>
+      </aside>
+
+      <!-- CENTER: era article -->
+      <article style="max-width:680px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#8C887C; letter-spacing:0.04em;">{{ active.date }}</div>
+        <h2 style="margin:12px 0 0; font-size:clamp(28px,3.4vw,38px); font-weight:800; letter-spacing:-0.03em; line-height:1.06;">{{ active.title }}</h2>
+        <div style="display:flex; align-items:center; gap:14px; margin-top:18px; padding-bottom:8px;">
+          <span style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#8C887C;">Architecture era</span>
+          <span style="font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#14130F; background:#FFFFFF; border:1px solid rgba(20,19,15,0.11); padding:4px 10px; border-radius:6px;">{{ active.archetype }}</span>
+        </div>
+
+        <!-- Track 1: Legislation -->
+        <div id="leg" style="scroll-margin-top:150px; padding-top:34px;">
+          <h3 style="margin:0; font-size:13.5px; font-weight:700; letter-spacing:0.03em; text-transform:uppercase; color:#14130F; display:flex; align-items:center; gap:10px;"><span style="width:22px; height:2px; background:var(--accent,#0E8A6E);"></span>Legislation &amp; CFR</h3>
+          <p style="margin:16px 0 0; font-family:'Newsreader',Georgia,serif; font-size:19px; line-height:1.72; color:#14130F;">{{ active.reg }}</p>
+          <div style="margin-top:16px; display:flex; flex-wrap:wrap; gap:8px;">
+            <sc-for list="{{ active.regCites }}" as="c" hint-placeholder-count="2">
+              <span style="font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#0A5C49; background:rgba(14,138,110,0.06); border:1px solid rgba(14,138,110,0.18); padding:5px 10px; border-radius:6px;">{{ c }}</span>
+            </sc-for>
+          </div>
+        </div>
+
+        <!-- Track 2: Technology -->
+        <div id="tech" style="scroll-margin-top:150px; padding-top:34px;">
+          <h3 style="margin:0; font-size:13.5px; font-weight:700; letter-spacing:0.03em; text-transform:uppercase; color:#14130F; display:flex; align-items:center; gap:10px;"><span style="width:22px; height:2px; background:#3A3A46;"></span>Technology of the era</h3>
+          <p style="margin:16px 0 0; font-family:'Newsreader',Georgia,serif; font-size:19px; line-height:1.72; color:#2B2A24;">{{ active.tech }}</p>
+          <div style="margin-top:16px; display:flex; flex-wrap:wrap; gap:8px;">
+            <sc-for list="{{ active.techKw }}" as="c" hint-placeholder-count="4">
+              <span style="font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#3A3A46; background:#FFFFFF; border:1px solid rgba(20,19,15,0.11); padding:5px 10px; border-radius:6px;">{{ c }}</span>
+            </sc-for>
+          </div>
+        </div>
+
+        <!-- Track 3: Risks -->
+        <div id="risk" style="scroll-margin-top:150px; padding-top:34px;">
+          <h3 style="margin:0; font-size:13.5px; font-weight:700; letter-spacing:0.03em; text-transform:uppercase; color:var(--signal,#B0552F); display:flex; align-items:center; gap:10px;"><span style="width:22px; height:2px; background:var(--signal,#B0552F);"></span>Risks &amp; blindspots</h3>
+          <div style="margin-top:16px; border-left:3px solid var(--signal,#B0552F); background:rgba(176,85,47,0.04); border-radius:0 12px 12px 0; padding:20px 22px;">
+            <p style="margin:0; font-size:16.5px; line-height:1.62; color:#2B2A24;">{{ active.risk }}</p>
+          </div>
+          <div style="margin-top:16px; display:flex; flex-wrap:wrap; gap:8px;">
+            <sc-for list="{{ active.riskKw }}" as="c" hint-placeholder-count="4">
+              <span style="font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--signal,#B0552F); background:rgba(176,85,47,0.05); border:1px solid rgba(176,85,47,0.2); padding:5px 10px; border-radius:6px;">{{ c }}</span>
+            </sc-for>
+          </div>
+        </div>
+
+        <!-- Sources -->
+        <details style="margin-top:36px; border-top:1px solid rgba(20,19,15,0.11); padding-top:20px;">
+          <summary style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+            <span style="font-size:14px; font-weight:700;">Verified government sources</span>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#8C887C;">tap to open</span>
+          </summary>
+          <div style="margin-top:14px;">
+            <sc-for list="{{ active.sources }}" as="src" hint-placeholder-count="1">
+              <a href="{{ src.url }}" target="_blank" rel="noopener noreferrer" style="display:flex; gap:10px; align-items:flex-start; padding:9px 0; text-decoration:none;">
+                <span style="color:#0A5C49; font-size:14px; margin-top:1px;">↗</span>
+                <span><span style="font-size:14px; font-weight:600; color:#0A5C49;">{{ src.label }}</span><span style="display:block; font-size:12.5px; color:#8C887C; margin-top:2px;">{{ src.description }}</span></span>
+              </a>
+            </sc-for>
+          </div>
+        </details>
+
+        <!-- Prev / next era -->
+        <div style="margin-top:40px; display:flex; gap:12px; border-top:1px solid rgba(20,19,15,0.11); padding-top:24px;">
+          <sc-if value="{{ hasPrev }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ goPrev }}" style="flex:1; text-align:left; border:1px solid rgba(20,19,15,0.11); background:#FFFFFF; cursor:pointer; padding:14px 16px; border-radius:12px;">
+              <span style="font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#8C887C; letter-spacing:0.08em; text-transform:uppercase;">← {{ prevYear }}</span>
+              <span style="display:block; font-size:14px; font-weight:600; color:#14130F; margin-top:4px;">{{ prevTitle }}</span>
+            </button>
+          </sc-if>
+          <sc-if value="{{ hasNext }}" hint-placeholder-val="{{ true }}">
+            <button onClick="{{ goNext }}" style="flex:1; text-align:right; border:1px solid rgba(20,19,15,0.11); background:#FFFFFF; cursor:pointer; padding:14px 16px; border-radius:12px;">
+              <span style="font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#8C887C; letter-spacing:0.08em; text-transform:uppercase;">{{ nextYear }} →</span>
+              <span style="display:block; font-size:14px; font-weight:600; color:#14130F; margin-top:4px;">{{ nextTitle }}</span>
+            </button>
+          </sc-if>
+        </div>
+      </article>
+
+      <!-- RIGHT: tracks jump + cross-link -->
+      <aside style="position:sticky; top:132px; display:flex; flex-direction:column; gap:26px;">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:#8C887C; margin-bottom:12px;">The three tracks</div>
+          <nav style="display:flex; flex-direction:column; gap:2px; border-left:1px solid rgba(20,19,15,0.11);">
+            <a href="#leg" style="font-size:13px; color:#0A5C49; font-weight:600; text-decoration:none; padding:6px 0 6px 14px; margin-left:-1px; border-left:2px solid var(--accent,#0E8A6E);">Legislation &amp; CFR</a>
+            <a href="#tech" style="font-size:13px; color:#57544B; text-decoration:none; padding:6px 0 6px 14px; margin-left:-1px; border-left:2px solid transparent;">Technology</a>
+            <a href="#risk" style="font-size:13px; color:var(--signal,#B0552F); font-weight:600; text-decoration:none; padding:6px 0 6px 14px; margin-left:-1px; border-left:2px solid var(--signal,#B0552F);">Risks &amp; blindspots</a>
+          </nav>
+        </div>
+        <a href="Breaches.dc.html" style="display:block; background:#14130F; color:#F4F1E8; border-radius:12px; padding:18px; text-decoration:none;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:#0E8A6E;">See it go wrong →</div>
+          <div style="margin-top:8px; font-size:15px; font-weight:600; line-height:1.25;">Breaches &amp; Outages</div>
+          <p style="margin:7px 0 0; font-size:12.5px; line-height:1.45; color:#C9C5B8;">The eras above, as the case files they produced.</p>
+        </a>
+      </aside>
+
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;accent&quot;: { &quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#0E8A6E&quot;, &quot;options&quot;: [&quot;#0E8A6E&quot;, &quot;#2A5FA8&quot;, &quot;#7A4CC0&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Theme&quot; },
+  &quot;signal&quot;: { &quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#B0552F&quot;, &quot;options&quot;: [&quot;#B0552F&quot;, &quot;#A6461D&quot;, &quot;#8A6D00&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Theme&quot; },
+  &quot;showTexture&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Theme&quot; }
+}">
+class Component extends DCLogic {
+  state = { activeYear: 2009 };
+
+  eras = [
+    { year: 1996, date: "August 21, 1996", short: "HIPAA enacted", title: "HIPAA enactment & legislative foundation",
+      reg: "President Clinton signs the Health Insurance Portability and Accountability Act into law (Pub. L. 104-191). Its first aim was insurance portability between jobs and 'administrative simplification' — digitizing healthcare billing.",
+      regCites: ["Public Law 104-191", "45 CFR Part 162"],
+      tech: "Paper charts, local mainframes, and dial-up modems. The fax machine was state of the art for sharing charts, prescriptions, and billing. Internet-connected records did not exist.",
+      techKw: ["Paper Records", "Physical Faxing", "Mainframe Billing", "Dial-up"],
+      risk: "Physical record theft and fire loss; faxes sent to wrong numbers with no audit log or delivery confirmation; lock-and-key as the only safeguard; zero visibility into insider snooping.",
+      riskKw: ["Accidental Fax Disclosure", "Zero Digital Logs", "No Encryption", "Physical Theft"],
+      sources: [{ label: "HHS HIPAA History", url: "https://www.hhs.gov/hipaa/for-professionals/faq/505/what-is-the-history-of-the-administrative-simplification-provisions/index.html", description: "HHS overview of early administrative simplification." }] },
+    { year: 2003, date: "April 14, 2003", short: "Privacy Rule effective", title: "HIPAA Privacy Rule compliance deadline",
+      reg: "The Privacy Rule takes full effect, setting national standards for protecting PHI held by covered entities. It grants patients rights over their data and introduces the 'minimum necessary' disclosure standard.",
+      regCites: ["45 CFR Part 160", "45 CFR § 164.502", "45 CFR § 164.512"],
+      tech: "Early electronic medical record databases arrive. Basic client-server clinical apps run inside single clinics over local networks behind physical boundaries.",
+      techKw: ["Early EMR", "Client-Server DB", "Local Area Networks", "SQL"],
+      risk: "Safeguards were administrative, not digital. Shared desktop passwords, no multi-factor authentication, and unencrypted local backups on floppy disks and magnetic tape.",
+      riskKw: ["Shared Accounts", "Unencrypted Tapes", "Weak Passwords", "No Offsite Security"],
+      sources: [{ label: "HHS Privacy Rule Summary", url: "https://www.hhs.gov/hipaa/for-professionals/privacy/laws-regulations/index.html", description: "Official OCR summary of the Privacy Rule." }] },
+    { year: 2005, date: "April 21, 2005", short: "Security Rule effective", title: "HIPAA Security Rule compliance deadline",
+      reg: "The Security Rule sets operational standards for electronic PHI, splitting compliance into three safeguard classes: administrative (policy, training, risk analysis), physical (facility and workstation access), and technical (access control, transmission security, encryption).",
+      regCites: ["45 CFR § 164.308", "45 CFR § 164.310", "45 CFR § 164.312"],
+      tech: "Hardware firewalls, early clinic Wi-Fi, basic SSL/TLS for web transactions, and the first web-based clinical portals.",
+      techKw: ["Hardware Firewalls", "SSL/TLS", "Intrusion Detection", "VPN Tunnels"],
+      risk: "A severe lack of recurring risk assessments — still the single most-cited Security Rule violation — plus unencrypted laptops, USB drives, and external disks holding mass records.",
+      riskKw: ["Unencrypted Laptops", "No Risk Assessment", "Insecure Wi-Fi", "Stale Permissions"],
+      sources: [{ label: "HHS Security Rule Guidance", url: "https://www.hhs.gov/hipaa/for-professionals/security/laws-regulations/index.html", description: "Required vs. addressable specifications." }, { label: "NIST SP 800-66", url: "https://csrc.nist.gov/pubs/sp/800/66/r2/final", description: "NIST guidance for implementing the Security Rule." }] },
+    { year: 2009, date: "February 17, 2009", short: "HITECH & Breach Rule", title: "HITECH Act & Breach Notification Rule",
+      reg: "Part of the Recovery Act, HITECH introduces the Breach Notification Rule (notify HHS, individuals, and media for 500+ affected), extends direct HIPAA liability to Business Associates, and sharply raises OCR's tiered civil penalties.",
+      regCites: ["42 U.S.C. §§ 17921-17954", "45 CFR §§ 164.400-414", "45 CFR § 160.404"],
+      tech: "Federal 'Meaningful Use' subsidies drive a mass push to cloud-hosted EHRs. Smartphones and early tablets enter clinical workflows, widening the data perimeter.",
+      techKw: ["EHR Meaningful Use", "Cloud Storage", "Mobile Health", "SAN Backups"],
+      risk: "Software rushed to meet subsidy deadlines shipped with unreviewed vulnerabilities. Device-encryption policy lagged mobile adoption, creating serious endpoint risk.",
+      riskKw: ["Software Vulnerabilities", "Insecure Endpoints", "Unvetted Vendors", "BAA Neglect"],
+      sources: [{ label: "HITECH Act Overview", url: "https://www.hhs.gov/hipaa/for-professionals/special-topics/hitech-act-regulatory-information/index.html", description: "Regulatory history and enforcement changes." }, { label: "OCR Breach Portal", url: "https://ocrportal.hhs.gov/ocr/breach/breach_report.jsf", description: "Public database of breaches affecting 500+ people." }] },
+    { year: 2013, date: "September 23, 2013", short: "Omnibus Final Rule", title: "HIPAA Omnibus Final Rule",
+      reg: "The Omnibus Rule folds HITECH into HIPAA: it extends liability to subcontractors, defines Business Associates broadly, replaces the subjective 'harm' test with an objective 'low probability of compromise' standard, and bars the sale of PHI without authorization.",
+      regCites: ["78 FR 5565", "45 CFR § 164.402", "45 CFR § 164.508(a)(4)"],
+      tech: "Broad adoption of AWS, Azure, and Google Cloud. HIPAA-compliant messaging, early software-to-software APIs, and AES-256 encryption at rest.",
+      techKw: ["AES-256 at Rest", "Healthcare Cloud", "Secure APIs", "Mobile Device Mgmt"],
+      risk: "Staff using consumer clouds (Dropbox, personal Drive) and public shares to store clinical images without a signed BAA. Insecure API endpoints.",
+      riskKw: ["Consumer Cloud Leakage", "Insecure APIs", "Shadow IT", "Subcontractor Failure"],
+      sources: [{ label: "HHS Omnibus Final Rule", url: "https://www.federalregister.gov/documents/2013/01/25/2013-01073/modifications-to-the-hipaa-privacy-security-breach-notification-and-enforcement-rules-under-the", description: "Complete rule in the Federal Register." }] },
+    { year: 2016, date: "July 11, 2016", short: "Ransomware guidance", title: "OCR guidance on ransomware attacks",
+      reg: "OCR declares a ransomware attack a presumptive HIPAA breach. Under 45 CFR § 164.402, an attacker encrypting ePHI is a 'disclosure' unless the entity can prove low probability of compromise through a four-factor assessment.",
+      regCites: ["45 CFR § 164.402", "45 CFR § 164.308(a)(7)"],
+      tech: "Endpoint security tools spread, alongside offsite cold backups, network segmentation, and automated SIEM monitoring.",
+      techKw: ["Network Segmentation", "Immutable Backups", "SIEM", "Endpoint Detection"],
+      risk: "Reliance on hot backups mapped to live network drives — so ransomware encrypts the backups too — plus weak phishing awareness among staff.",
+      riskKw: ["Connected Backup Encryption", "Spear Phishing", "Patch Lag", "Slow Isolation"],
+      sources: [{ label: "OCR Ransomware Guidance", url: "https://www.hhs.gov/sites/default/files/ransomware-fact-sheet-2016.pdf", description: "OCR PDF on ransomware as a presumptive breach." }] },
+    { year: 2020, date: "March 17, 2020", short: "Telehealth discretion", title: "COVID-19 telehealth enforcement discretion",
+      reg: "OCR issues Notification of Enforcement Discretion for telehealth, declining to penalize good-faith use of everyday communication tools during the public health emergency.",
+      regCites: ["85 FR 22024", "45 CFR § 164.502", "45 CFR § 164.308"],
+      tech: "An exponential surge in remote video visits, remote patient monitoring, cloud-native intake forms, and virtual workspaces.",
+      techKw: ["Video Telehealth", "Remote Monitoring", "Distributed Work", "Virtual EHR"],
+      risk: "Providers using prohibited public apps (TikTok, Facebook Live), family members overhearing consults, and insecure home Wi-Fi exposing EHR credentials.",
+      riskKw: ["Public Telehealth", "Unsecured Home Setup", "Phishing Wave", "SaaS Config Drift"],
+      sources: [{ label: "HHS Telehealth Notification", url: "https://www.hhs.gov/hipaa/for-professionals/special-topics/emergency-preparedness/notification-enforcement-discretion-telehealth/index.html", description: "HHS leniency notice for pandemic remote care." }] },
+    { year: 2022, date: "December 1, 2022", short: "Tracking-tech bulletin", title: "OCR guidance on online tracking technologies",
+      reg: "A landmark bulletin bars covered entities from using trackers (Meta Pixel, Google Analytics, Hotjar) in ways that disclose ePHI — including IP, device ID, or search terms — to vendors without a BAA or authorization.",
+      regCites: ["45 CFR § 164.502(a)", "45 CFR § 164.308(a)(1)(ii)(A)"],
+      tech: "Advanced analytics, browser tag managers, programmatic ad pixels, and customer-data platforms embedded deep in medical marketing.",
+      techKw: ["Tracking Pixels", "Tag Managers", "Customer Data Platforms", "Server-side GTM"],
+      risk: "Marketing operating apart from security, deploying client-side trackers onto appointment screens, login pages, and symptom checkers — exposing records to ad networks.",
+      riskKw: ["Pixels Leaking PHI", "Ad-Network Tracking", "Missing BAAs", "Fingerprinting"],
+      sources: [{ label: "OCR Tracking Technologies Bulletin", url: "https://www.hhs.gov/hipaa/for-professionals/privacy/guidance/tracking-technologies/index.html", description: "Official bulletin on web-tracking compliance." }] },
+    { year: 2024, date: "January 24, 2024", short: "Cyber Performance Goals", title: "HHS Cybersecurity Performance Goals & supply chain",
+      reg: "HHS releases voluntary Cybersecurity Performance Goals to guide provider infrastructure, amid intense scrutiny of supply-chain risk and plans to fold the CPGs into future enforcement.",
+      regCites: ["45 CFR § 164.308(a)(8)", "45 CFR § 164.314"],
+      tech: "Deep consolidation of medical IT, centralized clearinghouses, automated claims systems, AI-powered diagnostics, and multi-cloud API ecosystems.",
+      techKw: ["Clearinghouse APIs", "Third-Party Monitoring", "Cyber Performance Goals", "Supplier Portals"],
+      risk: "System monoculture and reliance on a few single-point-of-failure vendors for billing and authorizations, with no offline continuity plan for financial clearing.",
+      riskKw: ["Single-Point Vendors", "Claims Shutdown", "No Offline Billing", "Weak Supplier Audit"],
+      sources: [{ label: "HHS Cyber Performance Goals", url: "https://www.hhs.gov/cybersecurity/performance-goals/index.html", description: "HHS portal for voluntary and upcoming security benchmarks." }] },
+  ];
+
+  archetype(year) {
+    if (year <= 2005) return "Client-server, on-premise";
+    if (year <= 2016) return "SaaS & cloud integration";
+    return "Cloud-native API & microservices";
+  }
+
+  renderVals() {
+    const accent = this.props.accent ?? "#0E8A6E";
+    const idx = Math.max(0, this.eras.findIndex(e => e.year === this.state.activeYear));
+    const a = this.eras[idx];
+    const select = (year) => () => { this.setState({ activeYear: year }); if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" }); };
+
+    const spine = this.eras.map(e => {
+      const on = e.year === a.year;
+      return { year: e.year, onClick: select(e.year),
+        dotBg: on ? accent : "#F4F1E8", dotBorder: on ? accent : "rgba(20,19,15,0.28)",
+        weight: on ? 600 : 400, color: on ? "#14130F" : "#8C887C" };
+    });
+    const eraList = this.eras.map(e => {
+      const on = e.year === a.year;
+      return { year: e.year, short: e.short, onClick: select(e.year),
+        bg: on ? "rgba(14,138,110,0.06)" : "transparent",
+        edge: on ? accent : "rgba(20,19,15,0.09)",
+        yearColor: on ? "#14130F" : "#8C887C",
+        titleColor: on ? "#14130F" : "#57544B" };
+    });
+
+    const prev = idx > 0 ? this.eras[idx - 1] : null;
+    const next = idx < this.eras.length - 1 ? this.eras[idx + 1] : null;
+
+    return {
+      accent, signal: this.props.signal ?? "#B0552F", showTexture: this.props.showTexture ?? true,
+      spine, eraList, eraCount: this.eras.length,
+      active: { ...a, archetype: this.archetype(a.year) },
+      hasPrev: !!prev, prevYear: prev && prev.year, prevTitle: prev && prev.short, goPrev: prev ? select(prev.year) : null,
+      hasNext: !!next, nextYear: next && next.year, nextTitle: next && next.short, goNext: next ? select(next.year) : null,
+    };
+  }
+}
+</script>
+</body>
+</html>

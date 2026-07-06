@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; }
+    *, *::before, *::after { box-sizing: border-box; }
+    ::selection { background: #0E8A6E; color: #F4F1E8; }
+  </style>
+</helmet>
+
+<div style="min-height:100vh; position:relative; background:#F4F1E8; color:#14130F; font-family:'Archivo','Helvetica Neue',Arial,sans-serif; -webkit-font-smoothing:antialiased; --accent:{{accent}}; --signal:{{signal}};">
+
+  <sc-if value="{{ showTexture }}" hint-placeholder-val="{{ true }}">
+    <div style="position:fixed; inset:0; pointer-events:none; z-index:0; background-image:linear-gradient(rgba(20,19,15,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(20,19,15,0.04) 1px,transparent 1px); background-size:34px 34px; -webkit-mask-image:radial-gradient(120% 90% at 50% 0%,#000 50%,transparent 100%); mask-image:radial-gradient(120% 90% at 50% 0%,#000 50%,transparent 100%);"></div>
+  </sc-if>
+
+  <div style="position:relative; z-index:1;">
+
+    <!-- ── Nav ─────────────────────────────────────────── -->
+    <header style="position:sticky; top:0; z-index:20; backdrop-filter:saturate(140%) blur(8px); -webkit-backdrop-filter:saturate(140%) blur(8px); background:rgba(244,241,232,0.82); border-bottom:1px solid rgba(20,19,15,0.07);">
+      <div style="max-width:1180px; margin:0 auto; padding:15px 32px; display:flex; align-items:center; justify-content:space-between; gap:24px;">
+        <div style="display:flex; align-items:baseline; gap:12px;">
+          <a href="Dashboard.dc.html" style="font-weight:800; font-size:15px; letter-spacing:0.06em; color:#14130F; text-decoration:none;">HIPAA<span style="color:var(--accent,#0E8A6E);">·</span>WATCH</a>
+          <span style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#8C887C; letter-spacing:0.04em;">Compliance &amp; Technology</span>
+        </div>
+        <nav style="display:flex; align-items:center; gap:26px;">
+          <a href="Dashboard.dc.html" style="font-size:14px; font-weight:500; color:#57544B; text-decoration:none;">Overview</a>
+          <a href="Timeline.dc.html" style="font-size:14px; font-weight:500; color:#57544B; text-decoration:none;">Timeline</a>
+          <a href="Latest Intelligence.dc.html" style="font-size:14px; font-weight:500; color:#57544B; text-decoration:none;">Intelligence</a>
+          <a href="Breaches.dc.html" style="font-size:14px; font-weight:500; color:#57544B; text-decoration:none;">Breaches</a>
+          <a href="AI Advisor.dc.html" style="font-size:14px; font-weight:600; color:#0A5C49; padding-bottom:2px; border-bottom:2px solid var(--accent,#0E8A6E); text-decoration:none;">Advisor</a>
+        </nav>
+      </div>
+    </header>
+
+    <div style="max-width:1180px; margin:0 auto; padding:44px 32px 0;">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#8C887C; letter-spacing:0.06em;"><a href="Dashboard.dc.html" style="color:#8C887C; text-decoration:none;">Overview</a> &nbsp;/&nbsp; <span style="color:#14130F;">Advisor</span></div>
+    </div>
+
+    <!-- ── Two-column consult ──────────────────────────── -->
+    <div style="max-width:1180px; margin:0 auto; padding:20px 32px 200px; display:grid; grid-template-columns:260px minmax(0,1fr); gap:52px; align-items:start;">
+
+      <!-- LEFT: about + suggestions -->
+      <aside style="position:sticky; top:88px; display:flex; flex-direction:column; gap:26px;">
+        <div>
+          <h1 style="margin:0; font-size:26px; font-weight:800; letter-spacing:-0.025em; line-height:1.05;">Regulatory advisor</h1>
+          <p style="margin:12px 0 0; font-size:14px; line-height:1.55; color:#57544B;">Cross-reference CFR requirements, weigh breach precedents, and red-team cloud architectures — in plain language.</p>
+        </div>
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:#8C887C; margin-bottom:10px;">Try asking</div>
+          <sc-for list="{{ suggestions }}" as="s" hint-placeholder-count="4">
+            <button onClick="{{ s.onClick }}" style="display:block; width:100%; text-align:left; border:1px solid rgba(20,19,15,0.11); background:#FFFFFF; cursor:pointer; padding:12px 14px; border-radius:10px; margin-bottom:8px; font-family:'Archivo',sans-serif; font-size:13px; line-height:1.4; color:#2B2A24;">{{ s.label }}</button>
+          </sc-for>
+        </div>
+        <div style="border-left:2px solid rgba(20,19,15,0.14); padding:2px 0 2px 14px;">
+          <p style="margin:0; font-size:12px; line-height:1.5; color:#8C887C;">Educational reference, not legal advice. Every answer cites primary 45 CFR sources — verify before acting.</p>
+        </div>
+      </aside>
+
+      <!-- RIGHT: transcript -->
+      <div style="max-width:720px;">
+
+        <sc-if value="{{ showWelcome }}" hint-placeholder-val="{{ true }}">
+          <div style="border-bottom:1px solid rgba(20,19,15,0.11); padding-bottom:32px; margin-bottom:8px;">
+            <div style="display:inline-flex; align-items:center; gap:8px; font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#0A5C49;"><span style="width:8px; height:8px; border-radius:50%; background:var(--accent,#0E8A6E);"></span>Advisor ready</div>
+            <p style="margin:16px 0 0; font-family:'Newsreader',Georgia,serif; font-size:22px; line-height:1.5; color:#14130F; font-style:italic; max-width:44ch;">Ask a compliance question and I'll answer with the statute, the precedent, and the practical next step.</p>
+            <p style="margin:14px 0 0; font-size:14.5px; line-height:1.6; color:#57544B;">Pick a starter on the left, or type your own below — CFR clauses, security gaps, BAA checks, breach precedents.</p>
+          </div>
+        </sc-if>
+
+        <sc-for list="{{ thread }}" as="m" hint-placeholder-count="0">
+          <div style="padding:22px 0;">
+            <sc-if value="{{ m.isUser }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex; gap:12px; align-items:flex-start;">
+                <span style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:#8C887C; padding-top:4px; white-space:nowrap;">You asked</span>
+                <p style="margin:0; font-size:18px; font-weight:600; line-height:1.4; color:#14130F;">{{ m.text }}</p>
+              </div>
+            </sc-if>
+            <sc-if value="{{ m.isModel }}" hint-placeholder-val="{{ false }}">
+              <div style="border-left:2px solid var(--accent,#0E8A6E); padding-left:20px;">
+                <div style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#0A5C49; margin-bottom:12px;">Advisor</div>
+                <p style="margin:0; font-family:'Newsreader',Georgia,serif; font-size:18.5px; line-height:1.65; color:#14130F;">{{ m.lead }}</p>
+                <ul style="margin:16px 0 0; padding:0; list-style:none; display:flex; flex-direction:column; gap:11px;">
+                  <sc-for list="{{ m.points }}" as="p" hint-placeholder-count="4">
+                    <li style="display:flex; gap:11px; align-items:flex-start; font-size:15.5px; line-height:1.55; color:#2B2A24;"><span style="color:var(--accent,#0E8A6E); font-weight:700; margin-top:1px;">—</span><span>{{ p }}</span></li>
+                  </sc-for>
+                </ul>
+                <div style="margin-top:16px; display:flex; flex-wrap:wrap; gap:8px;">
+                  <sc-for list="{{ m.cites }}" as="c" hint-placeholder-count="2">
+                    <span style="font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#0A5C49; background:rgba(14,138,110,0.06); border:1px solid rgba(14,138,110,0.18); padding:5px 10px; border-radius:6px;">{{ c }}</span>
+                  </sc-for>
+                </div>
+                <div style="margin-top:16px; border-left:3px solid var(--accent,#0E8A6E); background:rgba(14,138,110,0.045); border-radius:0 10px 10px 0; padding:14px 18px;">
+                  <span style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:#0A5C49;">Practical next step</span>
+                  <p style="margin:8px 0 0; font-size:15px; line-height:1.55; color:#2B2A24;">{{ m.practice }}</p>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+
+        <sc-if value="{{ thinking }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:22px 0; font-family:'JetBrains Mono',monospace; font-size:13px; color:#8C887C; display:flex; align-items:center; gap:10px;"><span style="width:8px; height:8px; border-radius:50%; background:var(--accent,#0E8A6E); opacity:0.6;"></span>Cross-referencing statute and precedent…</div>
+        </sc-if>
+      </div>
+    </div>
+
+    <!-- ── Input bar ───────────────────────────────────── -->
+    <div style="position:fixed; left:0; right:0; bottom:0; z-index:25; background:linear-gradient(to top,#F4F1E8 60%,rgba(244,241,232,0)); padding:24px 32px 28px;">
+      <form onSubmit="{{ onSubmit }}" style="max-width:820px; margin:0 auto; display:flex; align-items:center; gap:10px; background:#FFFFFF; border:1px solid rgba(20,19,15,0.14); border-radius:14px; padding:6px 6px 6px 20px; box-shadow:0 2px 4px rgba(20,19,15,0.05),0 20px 44px -28px rgba(20,19,15,0.35);">
+        <input value="{{ input }}" onInput="{{ onInput }}" placeholder="Ask about CFR clauses, security gaps, BAA checks, breach precedents…" style="flex:1; border:none; outline:none; background:transparent; font-family:'Archivo',sans-serif; font-size:15px; color:#14130F; padding:13px 0;" />
+        <button type="submit" style="border:none; cursor:pointer; background:#14130F; color:#F4F1E8; font-family:'Archivo',sans-serif; font-weight:700; font-size:14px; padding:12px 22px; border-radius:10px; display:inline-flex; align-items:center; gap:8px;">Ask <span style="font-size:15px;">→</span></button>
+      </form>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;accent&quot;: { &quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#0E8A6E&quot;, &quot;options&quot;: [&quot;#0E8A6E&quot;, &quot;#2A5FA8&quot;, &quot;#7A4CC0&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Theme&quot; },
+  &quot;signal&quot;: { &quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#B0552F&quot;, &quot;options&quot;: [&quot;#B0552F&quot;, &quot;#A6461D&quot;, &quot;#8A6D00&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Theme&quot; },
+  &quot;showTexture&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Theme&quot; }
+}">
+class Component extends DCLogic {
+  state = { input: "", thread: [], thinking: false };
+
+  answers = {
+    p1: {
+      lead: "This is the Security Rule's risk-analysis standard — and the single most-cited HIPAA violation in OCR's history.",
+      points: [
+        "It requires an accurate, thorough assessment of the risks and vulnerabilities to the confidentiality, integrity, and availability of all ePHI you hold.",
+        "It is a 'required' implementation specification, not addressable — there is no discretion to skip it.",
+        "It must be ongoing. A one-time assessment does not satisfy the standard; re-run it whenever systems, vendors, or threats change.",
+        "Scope covers everything that touches ePHI — laptops, mobile, cloud backups, and every Business Associate.",
+      ],
+      cites: ["45 CFR § 164.308(a)(1)(ii)(A)", "45 CFR § 164.306(a)"],
+      practice: "Document the methodology and the findings. OCR asks for the written analysis first in nearly every investigation.",
+    },
+    p2: {
+      lead: "Under the December 2022 OCR bulletin, tracking pixels on patient-facing pages can be an impermissible disclosure of PHI.",
+      points: [
+        "If a pixel (Meta, Google Analytics, Hotjar) sends an IP address, device ID, or page activity tied to health services to a vendor without a BAA, that is a disclosure under § 164.502(a).",
+        "It applies even on unauthenticated pages — booking widgets, symptom checkers, login screens — not just logged-in portals.",
+        "Meta and Google will not sign HIPAA BAAs for standard analytics, so the transmission cannot be cured after the fact.",
+        "Novant Health (1.3M individuals) is the cautionary case.",
+      ],
+      cites: ["45 CFR § 164.502(a)", "45 CFR § 164.508"],
+      practice: "Inventory every third-party script on patient-facing pages and gate all marketing-tag changes behind compliance review.",
+    },
+    p3: {
+      lead: "The failure mode for cloud backups is almost always a coverage gap between what the BAA says and what the backup actually touches.",
+      points: [
+        "Confirm the BAA names the exact backup and disaster-recovery services in use — not just the primary storage tier.",
+        "Check that encryption at rest and in transit is contractually guaranteed, with key management defined.",
+        "Verify the BAA's breach-notification timelines meet the 60-day rule and flow down to subcontractors.",
+        "Test whether backups are network-isolated. Hot backups mapped to live drives get encrypted alongside production in a ransomware event (Hollywood Presbyterian, 2016).",
+      ],
+      cites: ["45 CFR § 164.308(a)(7)", "45 CFR § 164.314", "45 CFR § 164.312(a)(2)(iv)"],
+      practice: "Ask the vendor for their latest SOC 2 / HITRUST audit and reconcile it against your BAA line by line.",
+    },
+    p4: {
+      lead: "Anthem (78.8M records, 2015) was a privileged-access failure — and the controls that would have stopped it are all technical.",
+      points: [
+        "Multi-factor authentication on administrative and data-warehouse access would have blocked the reused credentials.",
+        "Query monitoring and rate-limiting would have flagged the bulk export of tens of millions of records.",
+        "Encryption at rest reduces the value of a warehouse dump even after access is gained.",
+        "Continuous mock-phishing addresses the initial spear-phishing vector.",
+      ],
+      cites: ["45 CFR § 164.312(a)(1)", "45 CFR § 164.312(b)", "45 CFR § 164.308(a)(5)"],
+      practice: "OCR's $16M settlement centered on access controls and monitoring — prioritize those two in your own audit.",
+    },
+  };
+
+  suggestionDefs = [
+    { key: "p1", label: "Explain the § 164.308(a)(1)(ii)(A) risk-analysis rule." },
+    { key: "p2", label: "What is our tracking-pixel liability under the 2022 OCR guidance?" },
+    { key: "p3", label: "Red-team our BAA audits for cloud backups." },
+    { key: "p4", label: "Summarize the technical controls from the Anthem breach." },
+  ];
+
+  genericAnswer(text) {
+    return {
+      lead: "Here's how I'd frame that against the HIPAA rules — treat this as an educational starting point, then confirm with the primary source.",
+      points: [
+        "Identify whether the data involved is PHI or ePHI; most obligations attach only once it is.",
+        "Map the question to the relevant rule — Privacy (use & disclosure), Security (safeguards), or Breach Notification.",
+        "Check whether a Business Associate is in the chain; if so, a signed BAA is almost always required.",
+        "Apply 'minimum necessary' and document your reasoning — OCR weighs the paper trail heavily.",
+      ],
+      cites: ["45 CFR Part 160", "45 CFR Part 164"],
+      practice: "For a definitive read on this specific scenario, cross-check the exact CFR section on HHS.gov or route it to compliance counsel.",
+    };
+  }
+
+  send(text, presetKey) {
+    const t = (text || "").trim();
+    if (!t || this.state.thinking) return;
+    const userMsg = { role: "user", text: t };
+    this.setState(s => ({ thread: [...s.thread, userMsg], input: "", thinking: true }));
+    setTimeout(() => {
+      const a = presetKey ? this.answers[presetKey] : this.genericAnswer(t);
+      const modelMsg = { role: "model", ...a };
+      this.setState(s => ({ thread: [...s.thread, modelMsg], thinking: false }));
+      if (typeof window !== "undefined") setTimeout(() => window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" }), 60);
+    }, 650);
+  }
+
+  renderVals() {
+    const thread = this.state.thread.map(m => ({
+      isUser: m.role === "user",
+      isModel: m.role === "model",
+      text: m.text,
+      lead: m.lead, points: m.points || [], cites: m.cites || [], practice: m.practice,
+    }));
+    return {
+      accent: this.props.accent ?? "#0E8A6E",
+      signal: this.props.signal ?? "#B0552F",
+      showTexture: this.props.showTexture ?? true,
+      input: this.state.input,
+      onInput: (e) => this.setState({ input: e.target.value }),
+      onSubmit: (e) => { e.preventDefault(); this.send(this.state.input); },
+      suggestions: this.suggestionDefs.map(s => ({ label: s.label, onClick: () => this.send(s.label, s.key) })),
+      thread,
+      thinking: this.state.thinking,
+      showWelcome: this.state.thread.length === 0,
+    };
+  }
+}
+</script>
+</body>
+</html>

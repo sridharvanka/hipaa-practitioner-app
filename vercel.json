@@ -1,0 +1,5 @@
+{
+  "installCommand": "npm install",
+  "buildCommand": "VITE_BASE_PATH=/hipaa/ vite build",
+  "outputDirectory": "dist"
+}

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; }
+    *, *::before, *::after { box-sizing: border-box; }
+    ::selection { background: #0E8A6E; color: #F4F1E8; }
+    html { scroll-behavior:smooth; }
+    details > summary { list-style:none; cursor:pointer; }
+    details > summary::-webkit-details-marker { display:none; }
+  </style>
+</helmet>
+
+<div style="min-height:100vh; position:relative; background:#F4F1E8; color:#14130F; font-family:'Archivo','Helvetica Neue',Arial,sans-serif; -webkit-font-smoothing:antialiased; --accent:{{accent}}; --signal:{{signal}};">
+
+  <sc-if value="{{ showTexture }}" hint-placeholder-val="{{ true }}">
+    <div style="position:fixed; inset:0; pointer-events:none; z-index:0; background-image:linear-gradient(rgba(20,19,15,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(20,19,15,0.04) 1px,transparent 1px); background-size:34px 34px; -webkit-mask-image:radial-gradient(120% 90% at 50% 0%,#000 50%,transparent 100%); mask-image:radial-gradient(120% 90% at 50% 0%,#000 50%,transparent 100%);"></div>
+  </sc-if>
+
+  <div style="position:relative; z-index:1;">
+
+    <!-- ── Nav ─────────────────────────────────────────── -->
+    <header style="position:sticky; top:0; z-index:20; backdrop-filter:saturate(140%) blur(8px); -webkit-backdrop-filter:saturate(140%) blur(8px); background:rgba(244,241,232,0.82); border-bottom:1px solid rgba(20,19,15,0.07);">
+      <div style="max-width:1240px; margin:0 auto; padding:15px 32px; display:flex; align-items:center; justify-content:space-between; gap:24px;">
+        <div style="display:flex; align-items:baseline; gap:12px;">
+          <a href="Dashboard.dc.html" style="font-weight:800; font-size:15px; letter-spacing:0.06em; color:#14130F; text-decoration:none;">HIPAA<span style="color:var(--accent,#0E8A6E);">·</span>WATCH</a>
+          <span style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#8C887C; letter-spacing:0.04em;">Compliance &amp; Technology</span>
+        </div>
+        <nav style="display:flex; align-items:center; gap:26px;">
+          <a href="Dashboard.dc.html" style="font-size:14px; font-weight:500; color:#57544B; text-decoration:none;">Overview</a>
+          <a href="Timeline.dc.html" style="font-size:14px; font-weight:500; color:#57544B; text-decoration:none;">Timeline</a>
+          <a href="Latest Intelligence.dc.html" style="font-size:14px; font-weight:500; color:#57544B; text-decoration:none;">Intelligence</a>
+          <a href="Breaches.dc.html" style="font-size:14px; font-weight:600; color:#14130F; padding-bottom:2px; border-bottom:2px solid var(--signal,#B0552F); text-decoration:none;">Breaches</a>
+          <a href="AI Advisor.dc.html" style="font-size:14px; font-weight:600; color:#0A5C49; text-decoration:none;">Advisor →</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- ── Section head ────────────────────────────────── -->
+    <div style="max-width:1240px; margin:0 auto; padding:44px 32px 0;">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:11.5px; color:#8C887C; letter-spacing:0.06em;"><a href="Dashboard.dc.html" style="color:#8C887C; text-decoration:none;">Overview</a> &nbsp;/&nbsp; <span style="color:#14130F;">Breaches</span></div>
+      <div style="display:flex; align-items:flex-end; justify-content:space-between; gap:32px; flex-wrap:wrap; margin-top:14px; border-bottom:1px solid rgba(20,19,15,0.11); padding-bottom:26px;">
+        <div style="max-width:640px;">
+          <h1 style="margin:0; font-size:clamp(30px,3.8vw,44px); font-weight:800; letter-spacing:-0.03em; line-height:1.0;">Breaches &amp; outages, up close</h1>
+          <p style="margin:14px 0 0; font-size:17px; line-height:1.55; color:#57544B;">Five case files audited by OCR — what failed, what it cost, and the one control that would have changed the ending. Read them like post-mortems.</p>
+        </div>
+        <div style="display:flex; align-items:center; gap:10px; background:#FFFFFF; border:1px solid rgba(20,19,15,0.11); border-radius:10px; padding:3px 3px 3px 14px; box-shadow:0 1px 2px rgba(20,19,15,0.04);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8C887C" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+          <input value="{{ q }}" onInput="{{ onSearch }}" placeholder="Filter cases…" style="border:none; outline:none; background:transparent; font-family:'Archivo',sans-serif; font-size:14px; color:#14130F; padding:9px 0; width:170px;" />
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Three-column reading layout ─────────────────── -->
+    <div style="max-width:1240px; margin:0 auto; padding:36px 32px 96px; display:grid; grid-template-columns:240px minmax(0,1fr) 220px; gap:48px; align-items:start;">
+
+      <!-- LEFT: case list -->
+      <aside style="position:sticky; top:88px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:#8C887C; margin-bottom:10px;">Case files</div>
+        <sc-for list="{{ caseList }}" as="c" hint-placeholder-count="5">
+          <button onClick="{{ c.onClick }}" style="display:block; width:100%; text-align:left; border:none; background:{{ c.bg }}; cursor:pointer; padding:13px 12px 13px 13px; border-left:2px solid {{ c.edge }}; margin-bottom:3px; border-radius:0 8px 8px 0;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600; color:{{ c.yearColor }};">{{ c.year }}</span>
+              <span style="font-family:'JetBrains Mono',monospace; font-size:9.5px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:var(--signal,#B0552F);">{{ c.type }}</span>
+            </div>
+            <div style="margin-top:4px; font-size:13px; font-weight:600; line-height:1.25; color:{{ c.titleColor }};">{{ c.entityShort }}</div>
+          </button>
+        </sc-for>
+        <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+          <p style="font-family:'JetBrains Mono',monospace; font-size:12px; color:#8C887C; padding:8px 2px;">No case matches “{{ q }}”.</p>
+        </sc-if>
+      </aside>
+
+      <!-- CENTER: case article -->
+      <article style="max-width:680px;">
+        <div style="display:flex; align-items:center; gap:10px; font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:0.04em;">
+          <span style="display:inline-flex; align-items:center; gap:7px; color:var(--signal,#B0552F); font-weight:600; text-transform:uppercase;"><span style="width:8px; height:8px; border-radius:2px; background:var(--signal,#B0552F);"></span>{{ active.type }}</span>
+          <span style="color:rgba(20,19,15,0.2);">·</span>
+          <span style="color:#8C887C;">Event year {{ active.year }}</span>
+        </div>
+        <h2 style="margin:16px 0 0; font-size:clamp(28px,3.4vw,38px); font-weight:800; letter-spacing:-0.03em; line-height:1.08;">{{ active.entity }}</h2>
+
+        <!-- Metrics -->
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:1px; background:rgba(20,19,15,0.1); border:1px solid rgba(20,19,15,0.11); border-radius:12px; overflow:hidden; margin-top:24px;">
+          <div style="background:#FFFFFF; padding:16px 18px;">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:#8C887C;">PHI records affected</div>
+            <div style="margin-top:6px; font-size:16px; font-weight:700; line-height:1.25; color:#14130F;">{{ active.recordsAffected }}</div>
+          </div>
+          <div style="background:#FFFFFF; padding:16px 18px;">
+            <div style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:#8C887C;">Financial impact</div>
+            <div style="margin-top:6px; font-size:16px; font-weight:700; line-height:1.25; color:var(--signal,#B0552F);">{{ active.financialImpact }}</div>
+          </div>
+        </div>
+
+        <!-- What happened -->
+        <div id="incident" style="scroll-margin-top:90px; padding-top:34px;">
+          <h3 style="margin:0; font-size:13.5px; font-weight:700; letter-spacing:0.03em; text-transform:uppercase; color:#14130F; display:flex; align-items:center; gap:10px;"><span style="width:22px; height:2px; background:#3A3A46;"></span>What happened</h3>
+          <p style="margin:16px 0 0; font-family:'Newsreader',Georgia,serif; font-size:19px; line-height:1.72; color:#14130F;">{{ active.summary }}</p>
+        </div>
+
+        <!-- Root cause -->
+        <div id="cause" style="scroll-margin-top:90px; padding-top:34px;">
+          <h3 style="margin:0; font-size:13.5px; font-weight:700; letter-spacing:0.03em; text-transform:uppercase; color:var(--signal,#B0552F); display:flex; align-items:center; gap:10px;"><span style="width:22px; height:2px; background:var(--signal,#B0552F);"></span>Root cause</h3>
+          <div style="margin-top:16px; border-left:3px solid var(--signal,#B0552F); background:rgba(176,85,47,0.04); border-radius:0 12px 12px 0; padding:20px 22px;">
+            <p style="margin:0; font-size:16.5px; line-height:1.62; color:#2B2A24;">{{ active.rootCause }}</p>
+          </div>
+        </div>
+
+        <!-- OCR response -->
+        <div id="ocr" style="scroll-margin-top:90px; padding-top:34px;">
+          <h3 style="margin:0; font-size:13.5px; font-weight:700; letter-spacing:0.03em; text-transform:uppercase; color:#14130F; display:flex; align-items:center; gap:10px;"><span style="width:22px; height:2px; background:#3A3A46;"></span>The OCR response</h3>
+          <p style="margin:16px 0 0; font-family:'Newsreader',Georgia,serif; font-size:19px; line-height:1.72; color:#2B2A24;">{{ active.regulatoryAction }}</p>
+        </div>
+
+        <!-- Lesson -->
+        <div id="lesson" style="scroll-margin-top:90px; padding-top:34px;">
+          <h3 style="margin:0; font-size:13.5px; font-weight:700; letter-spacing:0.03em; text-transform:uppercase; color:#0A5C49; display:flex; align-items:center; gap:10px;"><span style="width:22px; height:2px; background:var(--accent,#0E8A6E);"></span>The lesson that survived</h3>
+          <div style="margin-top:16px; border-left:3px solid var(--accent,#0E8A6E); background:rgba(14,138,110,0.045); border-radius:0 12px 12px 0; padding:20px 22px;">
+            <p style="margin:0; font-size:16.5px; line-height:1.62; color:#2B2A24;">{{ active.lessonsLearned }}</p>
+          </div>
+        </div>
+
+        <!-- Sources -->
+        <details style="margin-top:36px; border-top:1px solid rgba(20,19,15,0.11); padding-top:20px;">
+          <summary style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+            <span style="font-size:14px; font-weight:700;">HHS &amp; Congressional sources</span>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#8C887C;">tap to open</span>
+          </summary>
+          <div style="margin-top:14px;">
+            <sc-for list="{{ active.sources }}" as="src" hint-placeholder-count="1">
+              <a href="{{ src.url }}" target="_blank" rel="noopener noreferrer" style="display:flex; gap:10px; align-items:flex-start; padding:9px 0; text-decoration:none;">
+                <span style="color:#0A5C49; font-size:14px; margin-top:1px;">↗</span>
+                <span><span style="font-size:14px; font-weight:600; color:#0A5C49;">{{ src.label }}</span><span style="display:block; font-size:12.5px; color:#8C887C; margin-top:2px;">{{ src.description }}</span></span>
+              </a>
+            </sc-for>
+          </div>
+        </details>
+
+        <!-- Related -->
+        <div style="margin-top:40px; border-top:1px solid rgba(20,19,15,0.11); padding-top:24px;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:#8C887C; margin-bottom:14px;">More case files</div>
+          <sc-for list="{{ active.related }}" as="r" hint-placeholder-count="2">
+            <button onClick="{{ r.onClick }}" style="display:flex; width:100%; align-items:center; justify-content:space-between; gap:16px; text-align:left; border:none; background:transparent; cursor:pointer; padding:16px 6px 16px 0; border-bottom:1px solid rgba(20,19,15,0.07);">
+              <span>
+                <span style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--signal,#B0552F);">{{ r.year }} · {{ r.type }}</span>
+                <span style="display:block; font-size:16px; font-weight:600; color:#14130F; margin-top:4px;">{{ r.entityShort }}</span>
+              </span>
+              <span style="color:#8C887C; font-size:18px;">→</span>
+            </button>
+          </sc-for>
+        </div>
+      </article>
+
+      <!-- RIGHT: on this page + advisor -->
+      <aside style="position:sticky; top:88px; display:flex; flex-direction:column; gap:26px;">
+        <div>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:#8C887C; margin-bottom:12px;">On this page</div>
+          <nav style="display:flex; flex-direction:column; gap:2px; border-left:1px solid rgba(20,19,15,0.11);">
+            <a href="#incident" style="font-size:13px; color:#57544B; text-decoration:none; padding:6px 0 6px 14px; margin-left:-1px; border-left:2px solid transparent;">What happened</a>
+            <a href="#cause" style="font-size:13px; color:var(--signal,#B0552F); font-weight:600; text-decoration:none; padding:6px 0 6px 14px; margin-left:-1px; border-left:2px solid var(--signal,#B0552F);">Root cause</a>
+            <a href="#ocr" style="font-size:13px; color:#57544B; text-decoration:none; padding:6px 0 6px 14px; margin-left:-1px; border-left:2px solid transparent;">OCR response</a>
+            <a href="#lesson" style="font-size:13px; color:#0A5C49; font-weight:600; text-decoration:none; padding:6px 0 6px 14px; margin-left:-1px; border-left:2px solid var(--accent,#0E8A6E);">The lesson</a>
+          </nav>
+        </div>
+        <a href="AI Advisor.dc.html" style="display:block; background:#14130F; color:#F4F1E8; border-radius:12px; padding:18px; text-decoration:none;">
+          <div style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:#0E8A6E;">Ask the advisor →</div>
+          <div style="margin-top:8px; font-size:15px; font-weight:600; line-height:1.25;">Could this happen to us?</div>
+          <p style="margin:7px 0 0; font-size:12.5px; line-height:1.45; color:#C9C5B8;">Red-team your own controls against this case.</p>
+        </a>
+      </aside>
+
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;accent&quot;: { &quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#0E8A6E&quot;, &quot;options&quot;: [&quot;#0E8A6E&quot;, &quot;#2A5FA8&quot;, &quot;#7A4CC0&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Theme&quot; },
+  &quot;signal&quot;: { &quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#B0552F&quot;, &quot;options&quot;: [&quot;#B0552F&quot;, &quot;#A6461D&quot;, &quot;#8A6D00&quot;], &quot;tsType&quot;: &quot;string&quot;, &quot;section&quot;: &quot;Theme&quot; },
+  &quot;showTexture&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Theme&quot; }
+}">
+class Component extends DCLogic {
+  state = { activeId: "change-healthcare-2024", q: "" };
+
+  cases = [
+    { id: "change-healthcare-2024", year: 2024, entity: "Change Healthcare", entityShort: "Change Healthcare", type: "Ransomware",
+      recordsAffected: "~1 in 3 Americans (110M+)", financialImpact: "Over $2 billion",
+      summary: "In February 2024 the ALPHV/BlackCat group attacked Change Healthcare, the nation's largest billing and payment clearinghouse. Prescription billing, claim transmission, and clinical authorization stopped across thousands of pharmacies and hospitals for weeks.",
+      rootCause: "A remote-access administrative server (a Citrix portal) had no multi-factor authentication. Attackers logged in with compromised credentials and moved laterally across the corporate network.",
+      regulatoryAction: "OCR opened an investigation in March 2024 into whether Change Healthcare met the Security Rule on risk analysis and access controls. Congressional hearings followed.",
+      lessonsLearned: "Systems monoculture is an existential supply-chain threat. Keep isolated offline contingency billing, put MFA on every administrative entryway, and continuously audit third-party clearinghouses.",
+      sources: [{ label: "HHS OCR Change Healthcare Statement", url: "https://www.hhs.gov/about/news/2024/03/13/hhs-office-for-civil-rights-opens-investigation-change-healthcare-cyberattack.html", description: "OCR bulletin announcing the investigation." }, { label: "UHG Congressional Testimony", url: "https://www.finance.senate.gov/hearings/hacking-america-health-care-assessments-on-the-change-healthcare-cyber-attack-and-impacts", description: "Testimony detailing the Citrix server and missing MFA." }] },
+    { id: "novant-health-2022", year: 2022, entity: "Novant Health System", entityShort: "Novant Health", type: "Tracking Pixel",
+      recordsAffected: "1.3 million individuals", financialImpact: "Multi-million class actions (pending)",
+      summary: "Novant Health transmitted patient ePHI to Meta via the Meta Pixel embedded on its site and patient portal to track marketing. The pixel captured email addresses, IPs, appointment selections, and physician names.",
+      rootCause: "Marketing pixels deployed on portals, login pages, and self-scheduling tools with no vetting by IT, Legal, or Compliance — and no BAA with Meta.",
+      regulatoryAction: "OCR investigation and immediate patient notification, triggering a broad industry alert on tracking-technology compliance.",
+      lessonsLearned: "Marketing cannot bypass Security. Every pixel, script, and tag manager must be sandboxed and audited. Meta, Google, and others will not sign HIPAA BAAs for standard analytics accounts.",
+      sources: [{ label: "Novant Health Disclosure Notice", url: "https://www.novanthealth.org/home/about-us/newsroom/press-releases/novant-health-notifies-patients-of-data-privacy-incident", description: "Novant's press release on the misconfiguration." }] },
+    { id: "hollywood-presbyterian-2016", year: 2016, entity: "Hollywood Presbyterian Medical Center", entityShort: "Hollywood Presbyterian", type: "Ransomware",
+      recordsAffected: "Systems locked 10 days", financialImpact: "40 BTC ransom (~$17K) + diversion losses",
+      summary: "Locky ransomware locked staff out of EHR, lab software, and CT scanners at the Los Angeles hospital. Staff reverted to paper and fax, and emergency patients were diverted elsewhere.",
+      rootCause: "Compromised remote-access credentials and unpatched server operating systems let the malware execute and spread across the hospital intranet.",
+      regulatoryAction: "The incident spurred the landmark July 2016 OCR ransomware guidance — establishing that a ransomware event is presumed an unauthorized disclosure of PHI.",
+      lessonsLearned: "Segment clinical-equipment networks from office email. Test offline emergency charting annually. Deploy active endpoint detection and isolation.",
+      sources: [{ label: "HPMC Ransomware Resolution", url: "https://www.hipaajournal.com/hollywood-presbyterian-medical-center-pays-ransom-8321/", description: "Report on the payment and recovery." }] },
+    { id: "anthem-inc-2015", year: 2015, entity: "Anthem, Inc.", entityShort: "Anthem, Inc.", type: "Data Theft",
+      recordsAffected: "78.8 million individuals", financialImpact: "$16M OCR fine + $115M settlement",
+      summary: "A targeted spear-phishing campaign tricked an Anthem administrator into running malware. Attackers gained high-privilege credentials, queried the central warehouse, and bulk-exported names, Social Security numbers, birthdates, and clinical IDs.",
+      rootCause: "Successful spear-phishing of privileged admins, plus no MFA on deep data warehouses and no encryption or bulk-query monitoring at rest.",
+      regulatoryAction: "In 2018 OCR announced a then-record $16 million settlement, with a corrective action plan to overhaul Anthem's security.",
+      lessonsLearned: "Enforce MFA on every administrative database, rate-limit and monitor high-volume exports, and run continuous mock-phishing to train privileged staff.",
+      sources: [{ label: "HHS OCR Anthem Settlement", url: "https://www.hhs.gov/about/news/2018/10/15/anthem-pays-ocr-record-16-million-settlement-in-historic-medical-data-breach.html", description: "OCR statement on the $16M settlement." }] },
+    { id: "bcbst-2009", year: 2009, entity: "BlueCross BlueShield of Tennessee", entityShort: "BCBS Tennessee", type: "Physical Theft",
+      recordsAffected: "1.02 million individuals", financialImpact: "$1.5M OCR fine + $17M remediation",
+      summary: "Fifty-seven unencrypted backup hard drives holding customer-service call recordings and patient identifiers were physically stolen from a closet in a former call center undergoing renovation.",
+      rootCause: "No encryption of backup drives at rest, and poor physical inventory during an office transition. The closet had generic locks and no monitoring.",
+      regulatoryAction: "This became the first major multi-million-dollar OCR settlement under HITECH enforcement, issued in 2012.",
+      lessonsLearned: "Encrypt all backup media and portable storage holding ePHI (§ 164.312(a)(2)(iv)). Maintain strict physical controls during moves and renovations.",
+      sources: [{ label: "HHS OCR BCBST Settlement", url: "https://www.hhs.gov/hipaa/for-professionals/compliance-enforcement/agreements/bcbst/index.html", description: "Resolution Agreement and Corrective Action Plan." }] },
+  ];
+
+  renderVals() {
+    const accent = this.props.accent ?? "#0E8A6E";
+    const q = (this.state.q || "").trim().toLowerCase();
+    const byId = (id) => this.cases.find(c => c.id === id);
+    const select = (id) => () => { this.setState({ activeId: id }); if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" }); };
+
+    const a0 = byId(this.state.activeId) || this.cases[0];
+    const idx = this.cases.findIndex(c => c.id === a0.id);
+    const related = [this.cases[(idx + 1) % this.cases.length], this.cases[(idx + 2) % this.cases.length]]
+      .map(r => ({ year: r.year, type: r.type, entityShort: r.entityShort, onClick: select(r.id) }));
+    const active = { ...a0, related };
+
+    const match = (c) => !q || [c.entity, c.type, c.summary, c.rootCause, c.lessonsLearned, String(c.year)].some(f => (f || "").toLowerCase().includes(q));
+    const caseList = this.cases.filter(match).map(c => {
+      const on = c.id === a0.id;
+      return { year: c.year, type: c.type, entityShort: c.entityShort, onClick: select(c.id),
+        bg: on ? "rgba(176,85,47,0.06)" : "transparent",
+        edge: on ? (this.props.signal ?? "#B0552F") : "rgba(20,19,15,0.09)",
+        yearColor: on ? "#14130F" : "#8C887C",
+        titleColor: on ? "#14130F" : "#57544B" };
+    });
+
+    return {
+      accent, signal: this.props.signal ?? "#B0552F", showTexture: this.props.showTexture ?? true,
+      q: this.state.q, onSearch: (e) => this.setState({ q: e.target.value }),
+      active, caseList, noResults: caseList.length === 0,
+    };
+  }
+}
+</script>
+</body>
+</html>
