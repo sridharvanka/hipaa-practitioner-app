@@ -1,4 +1,4 @@
-export type PageKey = "dashboard" | "timeline" | "intelligence" | "breaches" | "advisor";
+export type PageKey = "origins" | "dashboard" | "timeline" | "intelligence" | "breaches" | "advisor";
 
 interface TopNavProps {
   active: PageKey;
@@ -7,6 +7,7 @@ interface TopNavProps {
 }
 
 const LINKS: { key: PageKey; label: string }[] = [
+  { key: "origins", label: "Origins" },
   { key: "dashboard", label: "Overview" },
   { key: "timeline", label: "Timeline" },
   { key: "intelligence", label: "Intelligence" },
@@ -30,7 +31,7 @@ export default function TopNav({ active, onNavigate, maxWidth = 1180 }: TopNavPr
         style={{ maxWidth, paddingTop: 15, paddingBottom: 15 }}
       >
         <button
-          onClick={() => onNavigate("dashboard")}
+          onClick={() => onNavigate("origins")}
           className="flex items-baseline gap-3 cursor-pointer bg-transparent border-none p-0"
         >
           <span className="font-extrabold text-[15px] tracking-[0.06em]" style={{ color: "var(--ink)" }}>

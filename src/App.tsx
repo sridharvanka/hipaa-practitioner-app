@@ -1,6 +1,7 @@
 import { useState } from "react";
 import GridTexture from "./components/GridTexture";
 import { PageKey } from "./components/TopNav";
+import OriginsLanding from "./components/OriginsLanding";
 import DashboardHub from "./components/DashboardHub";
 import TimelineVisualizer from "./components/TimelineVisualizer";
 import LatestDevelopments from "./components/LatestDevelopments";
@@ -8,7 +9,7 @@ import BreachDeepDives from "./components/BreachDeepDives";
 import AIComplianceAdvisor from "./components/AIComplianceAdvisor";
 
 export default function App() {
-  const [page, setPage] = useState<PageKey>("dashboard");
+  const [page, setPage] = useState<PageKey>("origins");
 
   const navigate = (next: PageKey) => {
     setPage(next);
@@ -19,6 +20,7 @@ export default function App() {
     <div className="relative min-h-screen font-sans" style={{ background: "var(--paper)", color: "var(--ink)" }}>
       <GridTexture />
       <div className="relative z-[1]">
+        {page === "origins" && <OriginsLanding onNavigate={navigate} />}
         {page === "dashboard" && <DashboardHub onNavigate={navigate} />}
         {page === "timeline" && <TimelineVisualizer onNavigate={navigate} />}
         {page === "intelligence" && <LatestDevelopments onNavigate={navigate} />}

@@ -294,6 +294,8 @@ export default function LatestDevelopments({ onNavigate }: Props) {
             <p style={{ margin: "12px 0 0", fontSize: 16.5, lineHeight: 1.6, color: "var(--reading-ink)" }}>{active.practice}</p>
           </div>
 
+          <RegulatoryImpactMap topicId={active.id} />
+
           {/* References */}
           <details id="refs" style={{ scrollMarginTop: 90, marginTop: 38, borderTop: "1px solid var(--line)", paddingTop: 22 }}>
             <summary className="flex items-center justify-between gap-3">
@@ -386,6 +388,256 @@ export default function LatestDevelopments({ onNavigate }: Props) {
             <p style={{ margin: "7px 0 0", fontSize: 12.5, lineHeight: 1.45, color: "#C9C5B8" }}>Mass General, Anthem, Change Healthcare — what went wrong.</p>
           </button>
         </aside>
+      </div>
+    </div>
+  );
+}
+
+interface MapNode {
+  id: string;
+  label: string;
+  type: "entry" | "gateway" | "database" | "leak" | "normal";
+  description: string;
+}
+
+interface MapEdge {
+  from: string;
+  to: string;
+  label?: string;
+  dashed?: boolean;
+  status?: "safe" | "leak" | "default";
+}
+
+function RegulatoryImpactMap({ topicId }: { topicId: string }) {
+  const [selectedNode, setSelectedNode] = useState<string | null>(null);
+
+  // Reset selected node when topic changes
+  useMemo(() => {
+    setSelectedNode(null);
+  }, [topicId]);
+
+  const mapData: Record<string, { nodes: MapNode[]; edges: MapEdge[]; title: string; explanation: string }> = {
+    reproductive: {
+      title: "Subpoena & Attestation Data Flow",
+      explanation: "Tracing the path of legal requests targeting reproductive care data. Under § 164.502(a)(5)(iii), a signed attestation is a mandatory gateway. Select a node to audit the controls.",
+      nodes: [
+        { id: "req", label: "Requestor (Law Enforcement/Court)", type: "entry", description: "Initiates a subpoena, court order, or warrant requesting medical records related to reproductive health care." },
+        { id: "gate", label: "Attestation Gate (§ 164.502)", type: "gateway", description: "Mandatory checkpoint. Covered entities must verify if the request is seeking PHI for investigating/prosecuting lawful reproductive care. If yes, it is blocked. If no, a signed compliance attestation is required." },
+        { id: "counsel", label: "Legal Counsel Review", type: "normal", description: "Attorneys review the attestation for truthfulness and compliance with local/federal law before approval." },
+        { id: "db", label: "EHR Database (PHI Storage)", type: "database", description: "The underlying health record database. Only unlocked for export after attestation verification is complete." },
+        { id: "leak", label: "Non-Compliant Disclosure", type: "leak", description: "Accidental release of reproductive care records without verification. Constitutes an immediate privacy rule breach and civil violation." }
+      ],
+      edges: [
+        { from: "req", to: "gate" },
+        { from: "gate", to: "counsel" },
+        { from: "gate", to: "leak" },
+        { from: "counsel", to: "db" }
+      ]
+    },
+    ambient: {
+      title: "Ambient Voice Capture Perimeter",
+      explanation: "Analyzing where clinical conversations are transcribed. Shadow AI tools bypass firewalls and store voice prints on public servers, bypassing BAA requirements. Select a node to audit the controls.",
+      nodes: [
+        { id: "room", label: "Clinician-Patient Dialogue", type: "entry", description: "The acoustic source containing biometric identifiers (voices) and highly sensitive clinical statements." },
+        { id: "app", label: "Ambient AI Scribe App", type: "normal", description: "Processes audio inputs. Must utilize secure local memory and TLS 1.3 encryption for transmissions." },
+        { id: "baa", label: "Scribe API & BAA Gate", type: "gateway", description: "Crucial contract gateway. Verifies if the transcribing AI vendor has a signed Business Associate Agreement. If not, ingestion must halt immediately." },
+        { id: "ehr", label: "EHR Integration (Structured Note)", type: "database", description: "Stores the final medical note. Requires audit logs documenting exactly when the note was written and by which AI system." },
+        { id: "leak", label: "Shadow AI Server Leak", type: "leak", description: "Consumer apps store audio recordings on public cloud servers to train LLMs without a signed BAA, causing a major Security Rule breach." }
+      ],
+      edges: [
+        { from: "room", to: "app" },
+        { from: "app", to: "baa" },
+        { from: "baa", to: "ehr" },
+        { from: "baa", to: "leak" }
+      ]
+    },
+    blocking: {
+      title: "FHIR API Interoperability Boundary",
+      explanation: "Mapping the 'Consumer App Loophole'. Under the Cures Act, hospitals cannot block exports. However, once records reach consumer apps, HIPAA protections instantly dissolve. Select a node to audit.",
+      nodes: [
+        { id: "ehr", label: "Certified EHR (FHIR API)", type: "database", description: "Stores structured medical records. Exposes patient data via HL7 FHIR APIs to promote patient access." },
+        { id: "gate", label: "OAuth 2.0 & Consent Dialogue", type: "gateway", description: "The critical compliance warning. Hospital must inform the patient that once they authorize export, HIPAA rules no longer bind the third-party app." },
+        { id: "app", label: "Uncovered Consumer App", type: "normal", description: "Third-party fitness or diagnostic apps. Bound only by FTC consumer protection rules and their own privacy policy—not HIPAA." },
+        { id: "broker", label: "Commercial Data Broker", type: "leak", description: "Non-covered apps can legally sell patient data to marketers, employers, or insurers. A major privacy blindspot for patients." }
+      ],
+      edges: [
+        { from: "ehr", to: "gate" },
+        { from: "gate", to: "app" },
+        { from: "app", to: "broker" }
+      ]
+    },
+    pixels: {
+      title: "Marketing Trackers & Analytics Perimeter",
+      explanation: "Auditing browser-level trackers. Deployed scripts send user actions (like booking appointments) alongside IP addresses directly to ad networks, which OCR rules flag as un-BAA'd PHI leaks. Select a node.",
+      nodes: [
+        { id: "browser", label: "Patient Browser (Appointment Page)", type: "entry", description: "The client-side interface where the patient browses symptoms or schedules an appointment, revealing clinical intent." },
+        { id: "tag", label: "Tag Manager Script Gate", type: "gateway", description: "The control layer. Must intercept and filter out tracking pixels on patient-facing routes before they load." },
+        { id: "pixel", label: "Ad Trackers (Meta Pixel/Google Analytics)", type: "normal", description: "Client-side trackers that match user behavior (clicks, typing) with personal IP addresses and browser fingerprints." },
+        { id: "broker", label: "Ad Network Ad-Targeting Engines", type: "leak", description: "Recipients of browser telemetry. If they use patient data for targeted ads without a BAA, the clinic faces major class-action suits and OCR penalties." }
+      ],
+      edges: [
+        { from: "browser", to: "tag" },
+        { from: "tag", to: "pixel" },
+        { from: "pixel", to: "broker" }
+      ]
+    }
+  };
+
+  const currentMap = mapData[topicId];
+  if (!currentMap) return null;
+
+  return (
+    <div 
+      style={{ 
+        marginTop: 36, 
+        background: "var(--surface)", 
+        border: "1px solid var(--line)", 
+        borderRadius: "var(--radius)", 
+        padding: "26px 30px",
+        boxShadow: "0 1px 2px rgba(20,19,15,0.03)",
+        marginBottom: 36
+      }}
+    >
+      <div className="flex items-center justify-between" style={{ borderBottom: "1px solid var(--line-soft)", paddingBottom: 12 }}>
+        <div>
+          <span className="font-mono" style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--accent-ink)" }}>
+            Interactive Security Mapping
+          </span>
+          <h3 style={{ margin: "4px 0 0", fontSize: 18, fontWeight: 700 }}>
+            {currentMap.title}
+          </h3>
+        </div>
+        <span className="font-mono" style={{ fontSize: 11, color: "var(--ink-faint)" }}>
+          2026 Focus
+        </span>
+      </div>
+
+      <p style={{ margin: "12px 0 24px", fontSize: 14.5, lineHeight: 1.5, color: "var(--ink-muted)" }}>
+        {currentMap.explanation}
+      </p>
+
+      {/* Visual Flow Diagram */}
+      <div 
+        className="flex flex-col md:flex-row items-stretch justify-center gap-4 md:gap-3 flex-wrap" 
+        style={{ 
+          padding: "24px 20px", 
+          background: "var(--inset)", 
+          borderRadius: 10, 
+          border: "1px solid var(--line-soft)", 
+          marginBottom: 24 
+        }}
+      >
+        {currentMap.nodes.map((node, index) => {
+          const isSelected = selectedNode === node.id;
+          let nodeBg = "var(--surface)";
+          let nodeBorder = "var(--line)";
+          let nodeTextColor = "var(--ink)";
+          let indicatorDotColor = "transparent";
+
+          if (node.type === "gateway") {
+            nodeBg = "rgba(14, 138, 110, 0.05)";
+            nodeBorder = "var(--accent)";
+            nodeTextColor = "var(--accent-ink)";
+            indicatorDotColor = "var(--accent)";
+          } else if (node.type === "leak") {
+            nodeBg = "rgba(176, 85, 47, 0.05)";
+            nodeBorder = "var(--signal)";
+            nodeTextColor = "var(--signal)";
+            indicatorDotColor = "var(--signal)";
+          } else if (node.type === "entry") {
+            nodeBg = "var(--chip-bg)";
+          }
+
+          return (
+            <div key={node.id} className="flex items-center gap-2">
+              <button
+                onClick={() => setSelectedNode(node.id)}
+                className="cursor-pointer font-sans transition-all text-left"
+                style={{
+                  background: nodeBg,
+                  border: isSelected ? "2px solid var(--ink)" : `1px solid ${nodeBorder}`,
+                  borderRadius: 10,
+                  padding: "12px 14px",
+                  maxWidth: 165,
+                  minWidth: 135,
+                  boxShadow: isSelected ? "0 2px 8px rgba(20,19,15,0.12)" : "0 1px 3px rgba(20,19,15,0.02)",
+                  position: "relative"
+                }}
+              >
+                {indicatorDotColor !== "transparent" && (
+                  <span 
+                    style={{ 
+                      position: "absolute", 
+                      top: -4, 
+                      right: -4, 
+                      width: 8, 
+                      height: 8, 
+                      borderRadius: "50%", 
+                      background: indicatorDotColor 
+                    }}
+                  ></span>
+                )}
+                <div className="font-mono" style={{ fontSize: 9, color: "var(--ink-faint)", textTransform: "uppercase", letterSpacing: "0.02em" }}>
+                  {node.type}
+                </div>
+                <div style={{ fontSize: 12, fontWeight: 600, color: nodeTextColor, marginTop: 2, lineHeight: 1.25 }}>
+                  {node.label}
+                </div>
+              </button>
+              
+              {index < currentMap.nodes.length - 1 && (
+                <span className="font-mono text-[14px]" style={{ color: "var(--ink-faint)", alignSelf: "center", padding: "0 2px" }}>
+                  →
+                </span>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Selected Node Audit Panel */}
+      <div 
+        style={{ 
+          background: "var(--inset)", 
+          border: `1px solid ${selectedNode ? "var(--ink)" : "var(--line-soft)"}`, 
+          borderRadius: 8, 
+          padding: "18px 22px", 
+          minHeight: 100,
+          transition: "border-color var(--transition)"
+        }}
+      >
+        {selectedNode ? (
+          <div>
+            <div className="flex items-center gap-2">
+              <span 
+                className="font-mono" 
+                style={{ 
+                  fontSize: 10, 
+                  fontWeight: 600, 
+                  textTransform: "uppercase", 
+                  color: "var(--ink-faint)",
+                  background: "var(--chip-bg)", 
+                  padding: "2px 6px", 
+                  borderRadius: 4 
+                }}
+              >
+                Security Audit
+              </span>
+              <strong style={{ fontSize: 14 }}>
+                {currentMap.nodes.find(n => n.id === selectedNode)?.label}
+              </strong>
+            </div>
+            <p style={{ margin: "8px 0 0", fontSize: 13.5, lineHeight: 1.52, color: "var(--ink-muted)" }}>
+              {currentMap.nodes.find(n => n.id === selectedNode)?.description}
+            </p>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center text-center" style={{ height: "100%", color: "var(--ink-faint)", padding: "10px 0" }}>
+            <p className="font-mono" style={{ fontSize: 12.5, margin: 0 }}>
+              💡 Select an architectural node above to run a regulatory compliance audit.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
